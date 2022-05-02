@@ -3,9 +3,17 @@
 `TruthTables.jl` is a simple package to create truth tables using Julia expressions.
 This package was created for educational purposes.
 
+## Installation
+
+This package is not yet registered. But you can install it using the repository link:
+
+```julia
+julia>] add https://github.com/eliascarv/TruthTables.jl
+```
+
 ## Usage
 
-```julia-repl
+```julia
 julia> @truthtable p || q
 TruthTable
 ┌───────┬───────┬───────┐
