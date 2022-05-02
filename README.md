@@ -13,7 +13,11 @@ julia>] add https://github.com/eliascarv/TruthTables.jl
 
 ## Usage
 
+To create a truth table use the `@truthtable` macro passing a proposition as an argument.
+
 ```julia
+julia> using TruthTables
+
 julia> @truthtable p || q
 TruthTable
 ┌───────┬───────┬───────┐
