@@ -13,7 +13,19 @@ julia>] add https://github.com/eliascarv/TruthTables.jl
 
 ## Usage
 
-To create a truth table use the `@truthtable` macro passing a proposition as an argument.
+To create a truth table use the `@truthtable` macro passing a proposition as an argument.\
+Some logical operators can be expressed using different symbols.
+This is the list of symbols that can be used:
+
+| Operator | Symbols |
+|-----------|-------------|
+| AND | `&&`, `&`, `∧` (`\wedge<tab>`) |
+| OR  | `\|\|`, `\|`, `∨` (`\vee<tab>`) |
+| NOT | `!`, `~`, `¬` (`\neg<tab>`) |
+| IMPLICATION | `-->` |
+| EQUIVALENCE | `<-->` |
+
+Examples:
 
 ```julia
 julia> using TruthTables
