@@ -1,8 +1,8 @@
--->(x, y) = !x || y
-<-->(x, y) = x ≡ y
-∧(x, y) = x && y
-∨(x, y) = x || y
-¬(x) = !x
+(-->)(x::Bool, y::Bool) = !x || y
+(<-->)(x::Bool, y::Bool) = x ≡ y
+∧(x::Bool, y::Bool) = x && y
+∨(x::Bool, y::Bool) = x || y
+¬(x::Bool) = !x
 
 getprop(x::Symbol) = x
 getprop(x::Any) = throw(ArgumentError("$x is not a valid proposition name."))
