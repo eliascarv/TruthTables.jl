@@ -4,10 +4,10 @@
 ∨(x::Bool, y::Bool) = x || y
 ¬(x::Bool) = !x
 
-getprop(x::Symbol) = x
-getprop(x::Any) = throw(ArgumentError("$x is not a valid proposition name."))
+_getprop(x::Symbol) = x
+_getprop(x::Any) = throw(ArgumentError("$x is not a valid proposition name."))
 
-function getprops!(props::Set{Symbol}, expr::Expr)
+function _getprops!(props::Vector{Symbol}, expr::Expr)
     if expr.head == :call
         args = expr.args[2:end]
     else
@@ -16,17 +16,18 @@ function getprops!(props::Set{Symbol}, expr::Expr)
     
     for arg in args
         if arg isa Expr 
-            getprops!(props, arg)
+            _getprops!(props, arg)
         else
-            push!(props, getprop(arg))
+            push!(props, _getprop(arg))
         end
     end
 end
 
 function getprops(expr::Expr)
-    props = Set{Symbol}()
-    getprops!(props, expr)
-    return collect(props)
+    props = Symbol[]
+    _getprops!(props, expr)
+    unique!(props)
+    return props
 end
 
 @static if VERSION < v"1.7"
