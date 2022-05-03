@@ -7,7 +7,7 @@
 getprop(x::Symbol) = x
 getprop(x::Any) = throw(ArgumentError("$x is not a valid proposition name."))
 
-function getprops!(props::Vector{Symbol}, expr::Expr)
+function getprops!(props::Set{Symbol}, expr::Expr)
     if expr.head == :call
         args = expr.args[2:end]
     else
@@ -24,10 +24,9 @@ function getprops!(props::Vector{Symbol}, expr::Expr)
 end
 
 function getprops(expr::Expr)
-    props = Symbol[]
+    props = Set{Symbol}()
     getprops!(props, expr)
-    unique!(props)
-    return props
+    return collect(props)
 end
 
 @static if VERSION < v"1.7"
