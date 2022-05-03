@@ -75,4 +75,16 @@ TruthTable
 │ true  │ false │ false │ false        │
 │ false │ false │ false │ true         │
 └───────┴───────┴───────┴──────────────┘
+
+
+julia> @truthtable !(x || y) <--> (!x && !y)
+TruthTable
+┌───────┬───────┬───────────────────────┐
+│   x   │   y   │ ¬(x ∨ y) <--> ¬x ∧ ¬y │
+├───────┼───────┼───────────────────────┤
+│ true  │ true  │ true                  │
+│ false │ true  │ true                  │
+│ true  │ false │ true                  │
+│ false │ false │ true                  │
+└───────┴───────┴───────────────────────┘
 ```
