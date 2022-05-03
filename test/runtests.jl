@@ -1,6 +1,7 @@
 using Test, Tables
 using TruthTables
 using TruthTables: TruthTable
+using TruthTables: -->, <-->, ∧, ∨, ¬
 
 @testset "TruthTables.jl" begin
     @testset "TruthTable" begin
@@ -71,6 +72,31 @@ using TruthTables: TruthTable
         """
         
         @test sprint(show, tt) == str
+    end
+
+    @testset "Logical operators" begin
+        @test (true ∧ true) == true
+        @test (true ∧ false) == false
+        @test (false ∧ true) == false
+        @test (false ∧ false) == false
+
+        @test (true ∨ true) == true
+        @test (true ∨ false) == true
+        @test (false ∨ true) == true
+        @test (false ∨ false) == false
+
+        @test (true --> true) == true
+        @test (true --> false) == false
+        @test (false --> true) == true
+        @test (false --> false) == true
+
+        @test (true <--> true) == true
+        @test (true <--> false) == false
+        @test (false <--> true) == false
+        @test (false <--> false) == true
+
+        @test ¬true == false
+        @test ¬false == true
     end
 end
 

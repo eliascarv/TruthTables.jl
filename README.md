@@ -1,5 +1,8 @@
 # TruthTables.jl
 
+[![Build Status](https://github.com/eliascarv/WebAPI.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/eliascarv/WebAPI.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/eliascarv/WebAPI.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/eliascarv/WebAPI.jl)
+
 `TruthTables.jl` is a simple package to create truth tables using Julia expressions.
 This package was created for educational purposes.
 
