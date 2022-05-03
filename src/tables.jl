@@ -1,8 +1,8 @@
 Tables.istable(::Type{TruthTable}) = true
 Tables.columnaccess(::Type{TruthTable}) = true
 Tables.columns(table::TruthTable) = table
-Tables.getcolumn(table::TruthTable, i::Int) = getcol(table, i)
-Tables.getcolumn(table::TruthTable, nm::Symbol) = getcol(table, nm)
+Tables.getcolumn(table::TruthTable, i::Int) = table.columns[i]
+Tables.getcolumn(table::TruthTable, nm::Symbol) = table.columns[table.colindex[nm]]
 Tables.columnnames(table::TruthTable) = table.colnames
 Tables.materializer(::Type{TruthTable}) = TruthTable
 
