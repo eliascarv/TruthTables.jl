@@ -26,6 +26,7 @@ end
 function getprops(expr::Expr)
     props = Symbol[]
     getprops!(props, expr)
+    unique!(props)
     return props
 end
 
