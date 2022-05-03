@@ -29,13 +29,22 @@ function getprops(expr::Expr)
     return props
 end
 
-function formatprop(expr::Expr)
-    exprname = string(expr)
-    replace(exprname,
-        "&&" => "∧", "&" => "∧",
-        "||" => "∨", "|" => "∨",
-        "!" => "¬", "~" => "¬"
-    ) 
+@static if VERSION < v"1.7"
+    function formatprop(expr::Expr)
+        exprname = string(expr)
+        exprname = replace(exprname, r"&{2}|&" => "∧")
+        exprname = replace(exprname, r"\|{2}|\|" => "∨")
+        replace(exprname, r"!|~" => "¬")
+    end
+else
+    function formatprop(expr::Expr)
+        exprname = string(expr)
+        replace(exprname,
+            "&&" => "∧", "&" => "∧",
+            "||" => "∨", "|" => "∨",
+            "!" => "¬", "~" => "¬"
+        ) 
+    end
 end
 
 """
