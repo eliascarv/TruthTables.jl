@@ -30,17 +30,32 @@ function getprops(expr::Expr)
     return props
 end
 
+function _getexprs!(exprs::Vector{Expr}, expr::Expr)
+    for arg in reverse(expr.args)
+        if arg isa Expr
+            pushfirst!(exprs, arg)
+            _getexprs!(exprs, arg)
+        end
+    end
+end
+
+function getexprs(expr::Expr)
+    exprs = [expr]
+    _getexprs!(exprs, expr)
+    return exprs
+end
+
 @static if VERSION < v"1.7"
     function formatprop(expr::Expr)
-        exprname = string(expr)
-        exprname = replace(exprname, r"&{2}|&" => "∧")
-        exprname = replace(exprname, r"\|{2}|\|" => "∨")
-        replace(exprname, r"!|~" => "¬")
+        str = string(expr)
+        str = replace(str, r"&{2}|&" => "∧")
+        str = replace(str, r"\|{2}|\|" => "∨")
+        replace(str, r"!|~" => "¬")
     end
 else
     function formatprop(expr::Expr)
-        exprname = string(expr)
-        replace(exprname,
+        str = string(expr)
+        replace(str,
             "&&" => "∧", "&" => "∧",
             "||" => "∨", "|" => "∨",
             "!" => "¬", "~" => "¬"
