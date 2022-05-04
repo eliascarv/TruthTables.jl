@@ -46,27 +46,36 @@ function getexprs(expr::Expr)
 end
 
 @static if VERSION < v"1.7"
-    function formatprop(expr::Expr)
+    function fromatexpr(expr::Expr)
         str = string(expr)
         str = replace(str, r"&{2}|&" => "∧")
         str = replace(str, r"\|{2}|\|" => "∨")
-        replace(str, r"!|~" => "¬")
+        Symbol(replace(str, r"!|~" => "¬"))
     end
 else
-    function formatprop(expr::Expr)
+    function fromatexpr(expr::Expr)
         str = string(expr)
-        replace(str,
+        str = replace(str,
             "&&" => "∧", "&" => "∧",
             "||" => "∨", "|" => "∨",
             "!" => "¬", "~" => "¬"
-        ) 
+        )
+        Symbol(str)
     end
 end
 
-"""
-    @truthtable proposition
+function _kwarg(expr::Expr)
+    if expr.head == :(=) && expr.args[1] == :full
+        return expr.args[2] 
+    end
+    throw(ArgumentError("Invalid kwarg expression."))
+end
 
-Creates a truth table for the logical propositional formula `proposition`.
+"""
+    @truthtable formula [full=false]
+
+Creates a truth table for the logical propositional formula.
+If `full` is true, the truth table will be created in expanded form.
 
 ## List of logical operators
 * AND: `&&`, `&`, `∧` (`\\wedge<tab>`)
@@ -105,6 +114,22 @@ TruthTable
 └───────┴───────┴───────┴──────────────┘
 
 
+julia> @truthtable p & (~q | r) full=true
+TruthTable
+┌───────┬───────┬───────┬───────┬────────┬──────────────┐
+│   p   │   q   │   r   │  ¬q   │ ¬q ∨ r │ p ∧ (¬q ∨ r) │
+├───────┼───────┼───────┼───────┼────────┼──────────────┤
+│ true  │ true  │ true  │ false │ true   │ true         │
+│ false │ true  │ true  │ false │ true   │ false        │
+│ true  │ false │ true  │ true  │ true   │ true         │
+│ false │ false │ true  │ true  │ true   │ false        │
+│ true  │ true  │ false │ false │ false  │ false        │
+│ false │ true  │ false │ false │ false  │ false        │
+│ true  │ false │ false │ true  │ true   │ true         │
+│ false │ false │ false │ true  │ true   │ false        │
+└───────┴───────┴───────┴───────┴────────┴──────────────┘
+
+
 julia> @truthtable p ∨ q <--> r
 TruthTable
 ┌───────┬───────┬───────┬──────────────┐
@@ -119,16 +144,55 @@ TruthTable
 │ true  │ false │ false │ false        │
 │ false │ false │ false │ true         │
 └───────┴───────┴───────┴──────────────┘
+
+
+julia> @truthtable p ∨ q <--> r full=true
+TruthTable
+┌───────┬───────┬───────┬───────┬──────────────┐
+│   p   │   q   │   r   │ p ∨ q │ p ∨ q <--> r │
+├───────┼───────┼───────┼───────┼──────────────┤
+│ true  │ true  │ true  │ true  │ true         │
+│ false │ true  │ true  │ true  │ true         │
+│ true  │ false │ true  │ true  │ true         │
+│ false │ false │ true  │ false │ false        │
+│ true  │ true  │ false │ true  │ false        │
+│ false │ true  │ false │ true  │ false        │
+│ true  │ false │ false │ true  │ false        │
+│ false │ false │ false │ false │ true         │
+└───────┴───────┴───────┴───────┴──────────────┘
 ```
 """
+macro truthtable(expr, full)
+    _truthtable(expr, _kwarg(full))
+end
+
 macro truthtable(expr)
-    props = getprops(expr)
-    sets = fill([true, false], length(props))
+    _truthtable(expr, false)
+end
+
+function _truthtable(expr::Expr, full::Bool)
+    names = getprops(expr)
+    sets = fill([true, false], length(names))
     rows = Iterators.product(sets...)
-    columns = [vec([row[i] for row in rows]) for i in eachindex(props)]
-    propcol = :( map(($(props...),) -> $expr, $(columns...)) )
-    propname = formatprop(expr)
+    columns = [vec([row[i] for row in rows]) for i in eachindex(names)]
+    exprcols = Expr[]
+
+    if full
+        exprs = getexprs(expr)
+        for expr in exprs
+            props = getprops(expr)
+            inds = indexin(props, names)
+            exprcol = :( map(($(props...),) -> $expr, $(columns[inds]...)) )
+            push!(names, fromatexpr(expr))
+            push!(exprcols, exprcol)
+        end
+    else
+        exprcol = :( map(($(names...),) -> $expr, $(columns...)) )
+        push!(names, fromatexpr(expr))
+        push!(exprcols, exprcol)
+    end
+
     return quote
-        TruthTable([$(columns...), $propcol], [$props; Symbol($propname)])
+        TruthTable([$(columns...), $(exprcols...)], $names)
     end
 end
