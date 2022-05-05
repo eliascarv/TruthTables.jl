@@ -4,10 +4,10 @@
 ∨(x::Bool, y::Bool) = x || y
 ¬(x::Bool) = !x
 
-_getprop(x::Symbol) = x
-_getprop(x::Any) = throw(ArgumentError("$x is not a valid proposition name."))
+_propname(x::Symbol) = x
+_propname(x::Any) = throw(ArgumentError("$x is not a valid proposition name."))
 
-function _getprops!(props::Vector{Symbol}, expr::Expr)
+function _propnames!(props::Vector{Symbol}, expr::Expr)
     if expr.head == :call
         args = expr.args[2:end]
     else
@@ -16,44 +16,44 @@ function _getprops!(props::Vector{Symbol}, expr::Expr)
     
     for arg in args
         if arg isa Expr 
-            _getprops!(props, arg)
+            _propnames!(props, arg)
         else
-            push!(props, _getprop(arg))
+            push!(props, _propname(arg))
         end
     end
 end
 
-function getprops(expr::Expr)
+function propnames(expr::Expr)
     props = Symbol[]
-    _getprops!(props, expr)
+    _propnames!(props, expr)
     unique!(props)
     return props
 end
 
-function _getexprs!(exprs::Vector{Expr}, expr::Expr)
+function _getsubexprs!(exprs::Vector{Expr}, expr::Expr)
     for arg in reverse(expr.args)
         if arg isa Expr
             pushfirst!(exprs, arg)
-            _getexprs!(exprs, arg)
+            _getsubexprs!(exprs, arg)
         end
     end
 end
 
-function getexprs(expr::Expr)
+function getsubexprs(expr::Expr)
     exprs = [expr]
-    _getexprs!(exprs, expr)
+    _getsubexprs!(exprs, expr)
     return exprs
 end
 
 @static if VERSION < v"1.7"
-    function fromatexpr(expr::Expr)
+    function exprname(expr::Expr)
         str = string(expr)
         str = replace(str, r"&{2}|&" => "∧")
         str = replace(str, r"\|{2}|\|" => "∨")
         Symbol(replace(str, r"!|~" => "¬"))
     end
 else
-    function fromatexpr(expr::Expr)
+    function exprname(expr::Expr)
         str = string(expr)
         str = replace(str,
             "&&" => "∧", "&" => "∧",
@@ -171,28 +171,28 @@ macro truthtable(expr)
 end
 
 function _truthtable(expr::Expr, full::Bool)
-    names = getprops(expr)
-    sets = fill([true, false], length(names))
-    rows = Iterators.product(sets...)
-    columns = [vec([row[i] for row in rows]) for i in eachindex(names)]
-    exprcols = Expr[]
+    colnames = propnames(expr)
+    bools = fill([true, false], length(colnames))
+    rows = Iterators.product(bools...)
+    columns = [vec([row[i] for row in rows]) for i in eachindex(colnames)]
+    colexprs = Expr[]
 
     if full
-        exprs = getexprs(expr)
-        for expr in exprs
-            props = getprops(expr)
-            inds = indexin(props, names)
-            exprcol = :( map(($(props...),) -> $expr, $(columns[inds]...)) )
-            push!(names, fromatexpr(expr))
-            push!(exprcols, exprcol)
+        subexprs = getsubexprs(expr)
+        for subexpr in subexprs
+            nms = propnames(subexpr)
+            inds = indexin(nms, colnames)
+            colexpr = :( map(($(nms...),) -> $subexpr, $(columns[inds]...)) )
+            push!(colnames, exprname(subexpr))
+            push!(colexprs, colexpr)
         end
     else
-        exprcol = :( map(($(names...),) -> $expr, $(columns...)) )
-        push!(names, fromatexpr(expr))
-        push!(exprcols, exprcol)
+        colexpr = :( map(($(colnames...),) -> $expr, $(columns...)) )
+        push!(colnames, exprname(expr))
+        push!(colexprs, colexpr)
     end
 
     return quote
-        TruthTable([$(columns...), $(exprcols...)], $names)
+        TruthTable([$(columns...), $(colexprs...)], $colnames)
     end
 end
