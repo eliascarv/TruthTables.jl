@@ -51,6 +51,24 @@ using TruthTables: -->, <-->, ∧, ∨, ¬
         @test Tables.getcolumn(tt, :p) == Bool[1, 0, 1, 0]
         @test Tables.getcolumn(tt, :q) == Bool[1, 1, 0, 0]
         @test Tables.getcolumn(tt, Symbol("p ∨ q")) == Bool[1, 1, 1, 0]
+
+        tt = @truthtable !(x || y) <--> (!x && !y) full=true
+        @test Tables.getcolumn(tt, 1) == Bool[1, 0, 1, 0]
+        @test Tables.getcolumn(tt, 2) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, 3) == Bool[1, 1, 1, 0]
+        @test Tables.getcolumn(tt, 4) == Bool[0, 0, 0, 1]
+        @test Tables.getcolumn(tt, 5) == Bool[0, 1, 0, 1]
+        @test Tables.getcolumn(tt, 6) == Bool[0, 0, 1, 1]
+        @test Tables.getcolumn(tt, 7) == Bool[0, 0, 0, 1]
+        @test Tables.getcolumn(tt, 8) == Bool[1, 1, 1, 1]
+        @test Tables.getcolumn(tt, :x) == Bool[1, 0, 1, 0]
+        @test Tables.getcolumn(tt, :y) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, Symbol("x ∨ y")) == Bool[1, 1, 1, 0]
+        @test Tables.getcolumn(tt, Symbol("¬(x ∨ y)")) == Bool[0, 0, 0, 1]
+        @test Tables.getcolumn(tt, Symbol("¬x")) == Bool[0, 1, 0, 1]
+        @test Tables.getcolumn(tt, Symbol("¬y")) == Bool[0, 0, 1, 1]
+        @test Tables.getcolumn(tt, Symbol("¬x ∧ ¬y")) == Bool[0, 0, 0, 1]
+        @test Tables.getcolumn(tt, Symbol("¬(x ∨ y) <--> ¬x ∧ ¬y")) == Bool[1, 1, 1, 1]
     end
 
     @testset "TruthTable show" begin
@@ -69,6 +87,25 @@ using TruthTables: -->, <-->, ∧, ∨, ¬
         │ true  │ false │ false │ false       │
         │ false │ false │ false │ false       │
         └───────┴───────┴───────┴─────────────┘
+        """
+        
+        @test sprint(show, tt) == str
+
+        tt = @truthtable p && (q || r) full=true
+        str = """
+        TruthTable
+        ┌───────┬───────┬───────┬───────┬─────────────┐
+        │   p   │   q   │   r   │ q ∨ r │ p ∧ (q ∨ r) │
+        ├───────┼───────┼───────┼───────┼─────────────┤
+        │ true  │ true  │ true  │ true  │ true        │
+        │ false │ true  │ true  │ true  │ false       │
+        │ true  │ false │ true  │ true  │ true        │
+        │ false │ false │ true  │ true  │ false       │
+        │ true  │ true  │ false │ true  │ true        │
+        │ false │ true  │ false │ true  │ false       │
+        │ true  │ false │ false │ false │ false       │
+        │ false │ false │ false │ false │ false       │
+        └───────┴───────┴───────┴───────┴─────────────┘
         """
         
         @test sprint(show, tt) == str
