@@ -75,16 +75,23 @@ end
     @truthtable formula [full=false]
 
 Creates a truth table for the logical propositional formula.
-If `full` is true, the truth table will be created in expanded form.
+
+`full` is an optional keyword argument which by default is `false`. 
+If `full` is `true`, the truth table will be created in expanded form.
 
 ## List of logical operators
+
 * AND: `&&`, `&`, `∧` (`\\wedge<tab>`)
 * OR: `||`, `|`, `∨` (`\\vee<tab>`)
 * NOT: `!`, `~`, `¬` (`\\neg<tab>`)
+* XOR: `⊻` (`\\xor<tab>`)
+* NAND: `⊼` (`\\nand<tab>`)
+* NOR: `⊽` (`\\nor<tab>`)
 * IMPLICATION: `-->`
 * EQUIVALENCE: `<-->`
 
 # Examples
+
 ```julia
 julia> @truthtable p || q
 TruthTable
@@ -130,7 +137,7 @@ TruthTable
 └───────┴───────┴───────┴───────┴────────┴──────────────┘
 
 
-julia> @truthtable p ∨ q <--> r
+julia> @truthtable p ∨ q <--> r full=false
 TruthTable
 ┌───────┬───────┬───────┬──────────────┐
 │   p   │   q   │   r   │ p ∨ q <--> r │
