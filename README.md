@@ -8,7 +8,7 @@ This package was created for educational purposes.
 
 ## Installation
 
-This package is not yet registered. But you can install it using the repository link:
+To install TruthTables.jl use Julia's package manager:
 
 ```julia
 julia>] add https://github.com/eliascarv/TruthTables.jl
