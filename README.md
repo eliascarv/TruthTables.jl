@@ -11,7 +11,7 @@ This package was created for educational purposes.
 To install TruthTables.jl use Julia's package manager:
 
 ```julia
-julia>] add https://github.com/eliascarv/TruthTables.jl
+julia>] add TruthTables
 ```
 
 ## Usage
