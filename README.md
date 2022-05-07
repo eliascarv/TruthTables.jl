@@ -31,7 +31,7 @@ This is the list of symbols that can be used:
 | NAND | `⊼` (`\nand<tab>`) |
 | NOR  | `⊽` (`\nor<tab>`) |
 | IMPLICATION | `-->` |
-| EQUIVALENCE | `<-->` |
+| EQUIVALENCE | `<-->`, `≡` (`\equiv<tab>`) |
 
 Examples:
 

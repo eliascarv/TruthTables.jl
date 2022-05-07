@@ -88,7 +88,7 @@ If `full` is `true`, the truth table will be created in expanded form.
 * NAND: `⊼` (`\\nand<tab>`)
 * NOR: `⊽` (`\\nor<tab>`)
 * IMPLICATION: `-->`
-* EQUIVALENCE: `<-->`
+* EQUIVALENCE: `<-->`, `≡` (`\\equiv<tab>`)
 
 # Examples
 
