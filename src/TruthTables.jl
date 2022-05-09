@@ -3,7 +3,6 @@ module TruthTables
 using Tables, PrettyTables
 
 export @truthtable
-export showmode!
 export -->, <-->
 export ∧, ∨, ¬
 
