@@ -22,13 +22,13 @@ function Base.show(io::IO, table::TruthTable)
 end
 
 # show mode
-const SHOW_MODE = Ref(:bool)
+const SHOW_MODE = Ref(:default)
 
-showmode!() = (SHOW_MODE[] = :bool)
+showmode!() = (SHOW_MODE[] = :default)
 
 function showmode!(mode::Symbol)
-    if mode ∉ (:bool, :bit, :letter)
-        throw(ArgumentError("Invalid show mode, use :bool, :bit or :letter."))
+    if mode ∉ (:default, :bit, :letter)
+        throw(ArgumentError("Invalid show mode, use :default, :bit or :letter."))
     end
     SHOW_MODE[] = mode
 end
@@ -39,7 +39,7 @@ _letter_formatter(v, i, j) = v ? "T" : "F"
 
 function getformatter()
     mode = SHOW_MODE[]
-    mode == :bool && return nothing
+    mode == :default && return nothing
     mode == :bit && return _bit_formatter
     mode == :letter && return _letter_formatter
     return nothing
