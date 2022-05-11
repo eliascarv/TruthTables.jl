@@ -1,13 +1,13 @@
-const SHOW_MODE = Ref(:default)
+const SHOW_MODE = Ref(:bool)
 
 """
-    TruthTables.showmode!(mode::Symbol = :default)
+    TruthTables.showmode!(mode::Symbol = :bool)
 
-Changes the show mode of TruthTable type.\\
-The mode argument can be one of these symbols: `:default`, `:bit` or `:letter`.\\
-If mode is `:default`, the boolean values (`true` and `false`) will be show without formatting.\\
-If mode is `:bit`, `true` and `false` will be show as `1` and `0`.\\
-If mode is `:letter`, `true` and `false` will be show as `T` and `F`.
+Changes the way `TruthTable`s are displayed.\\
+The mode argument can be one of these symbols: `:bool` (default), `:bit` or `:letter`.\\
+`:bool` will use the boolean values (`true` and `false`) without formatting.\\
+`:bit` will use `1` and `0` for `true` and `false`, respectively.\\
+`:letter` will use T for `true` and F for `false`.
 
 # Examples
 
@@ -57,7 +57,7 @@ TruthTable
 
 
 julia> TruthTables.showmode!()
-:default
+:bool
 
 julia> tt
 TruthTable
@@ -72,13 +72,13 @@ TruthTable
 ```
 """
 function showmode!(mode::Symbol)
-    if mode ∉ (:default, :bit, :letter)
-        throw(ArgumentError("Invalid show mode, use :default, :bit or :letter."))
+    if mode ∉ (:bool, :bit, :letter)
+        throw(ArgumentError("Invalid show mode, use :bool, :bit or :letter."))
     end
     SHOW_MODE[] = mode
 end
 
-showmode!() = (SHOW_MODE[] = :default)
+showmode!() = (SHOW_MODE[] = :bool)
 
 # formatters
 _bit_formatter(v, i, j) = Int(v)
@@ -86,7 +86,7 @@ _letter_formatter(v, i, j) = v ? "T" : "F"
 
 function getformatter()
     mode = SHOW_MODE[]
-    mode == :default && return nothing
+    mode == :bool && return nothing
     mode == :bit && return _bit_formatter
     mode == :letter && return _letter_formatter
     return nothing
