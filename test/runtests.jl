@@ -1,7 +1,6 @@
 using Test, Tables
 using TruthTables
 using TruthTables: TruthTable
-using TruthTables: -->, <-->, ∧, ∨, ¬
 
 @testset "TruthTables.jl" begin
     @testset "TruthTable" begin
@@ -72,6 +71,10 @@ using TruthTables: -->, <-->, ∧, ∨, ¬
     end
 
     @testset "TruthTable show" begin
+        # default show mode
+        @test TruthTables.showmode!() == :bool
+        
+        # show mode: :bool
         tt = @truthtable p && (q || r)
         str = """
         TruthTable
@@ -88,9 +91,48 @@ using TruthTables: -->, <-->, ∧, ∨, ¬
         │ false │ false │ false │ false       │
         └───────┴───────┴───────┴─────────────┘
         """
-        
         @test sprint(show, tt) == str
 
+        # show mode: :bit
+        TruthTables.showmode!(:bit)
+        str = """
+        TruthTable
+        ┌───┬───┬───┬─────────────┐
+        │ p │ q │ r │ p ∧ (q ∨ r) │
+        ├───┼───┼───┼─────────────┤
+        │ 1 │ 1 │ 1 │ 1           │
+        │ 0 │ 1 │ 1 │ 0           │
+        │ 1 │ 0 │ 1 │ 1           │
+        │ 0 │ 0 │ 1 │ 0           │
+        │ 1 │ 1 │ 0 │ 1           │
+        │ 0 │ 1 │ 0 │ 0           │
+        │ 1 │ 0 │ 0 │ 0           │
+        │ 0 │ 0 │ 0 │ 0           │
+        └───┴───┴───┴─────────────┘
+        """
+        @test sprint(show, tt) == str
+
+        # show mode: :letter
+        TruthTables.showmode!(:letter)
+        str = """
+        TruthTable
+        ┌───┬───┬───┬─────────────┐
+        │ p │ q │ r │ p ∧ (q ∨ r) │
+        ├───┼───┼───┼─────────────┤
+        │ T │ T │ T │ T           │
+        │ F │ T │ T │ F           │
+        │ T │ F │ T │ T           │
+        │ F │ F │ T │ F           │
+        │ T │ T │ F │ T           │
+        │ F │ T │ F │ F           │
+        │ T │ F │ F │ F           │
+        │ F │ F │ F │ F           │
+        └───┴───┴───┴─────────────┘
+        """
+        @test sprint(show, tt) == str
+
+        # show mode: :bool (default)
+        TruthTables.showmode!()
         tt = @truthtable p && (q || r) full=true
         str = """
         TruthTable
@@ -107,8 +149,62 @@ using TruthTables: -->, <-->, ∧, ∨, ¬
         │ false │ false │ false │ false │ false       │
         └───────┴───────┴───────┴───────┴─────────────┘
         """
-        
         @test sprint(show, tt) == str
+
+        # show mode: :bit
+        TruthTables.showmode!(:bit)
+        str = """
+        TruthTable
+        ┌───┬───┬───┬───────┬─────────────┐
+        │ p │ q │ r │ q ∨ r │ p ∧ (q ∨ r) │
+        ├───┼───┼───┼───────┼─────────────┤
+        │ 1 │ 1 │ 1 │ 1     │ 1           │
+        │ 0 │ 1 │ 1 │ 1     │ 0           │
+        │ 1 │ 0 │ 1 │ 1     │ 1           │
+        │ 0 │ 0 │ 1 │ 1     │ 0           │
+        │ 1 │ 1 │ 0 │ 1     │ 1           │
+        │ 0 │ 1 │ 0 │ 1     │ 0           │
+        │ 1 │ 0 │ 0 │ 0     │ 0           │
+        │ 0 │ 0 │ 0 │ 0     │ 0           │
+        └───┴───┴───┴───────┴─────────────┘
+        """
+        @test sprint(show, tt) == str
+
+        # show mode: :letter
+        TruthTables.showmode!(:letter)
+        str = """
+        TruthTable
+        ┌───┬───┬───┬───────┬─────────────┐
+        │ p │ q │ r │ q ∨ r │ p ∧ (q ∨ r) │
+        ├───┼───┼───┼───────┼─────────────┤
+        │ T │ T │ T │ T     │ T           │
+        │ F │ T │ T │ T     │ F           │
+        │ T │ F │ T │ T     │ T           │
+        │ F │ F │ T │ T     │ F           │
+        │ T │ T │ F │ T     │ T           │
+        │ F │ T │ F │ T     │ F           │
+        │ T │ F │ F │ F     │ F           │
+        │ F │ F │ F │ F     │ F           │
+        └───┴───┴───┴───────┴─────────────┘
+        """
+        @test sprint(show, tt) == str
+
+        # getformatter
+        TruthTables.showmode!(:bit)
+        @test TruthTables.getformatter() === TruthTables._bit_formatter
+        TruthTables.showmode!(:letter)
+        @test TruthTables.getformatter() === TruthTables._letter_formatter
+        TruthTables.showmode!(:bool)
+        @test TruthTables.getformatter() === nothing
+
+        # formatters
+        @test TruthTables._bit_formatter(true, 1, 1) == 1
+        @test TruthTables._bit_formatter(false, 1, 1) == 0
+        @test TruthTables._letter_formatter(true, 1, 1) == "T"
+        @test TruthTables._letter_formatter(false, 1, 1) == "F"
+
+        # throws
+        @test_throws ArgumentError TruthTables.showmode!(:test)
     end
 
     @testset "Logical operators" begin
