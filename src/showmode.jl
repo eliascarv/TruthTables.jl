@@ -25,7 +25,6 @@ TruthTable
 │ false │ false │ false │
 └───────┴───────┴───────┘
 
-
 julia> TruthTables.showmode!(:bit)
 :bit
 
@@ -40,7 +39,6 @@ TruthTable
 │ 0 │ 0 │ 0     │
 └───┴───┴───────┘
 
-
 julia> TruthTables.showmode!(:letter)
 :letter
 
@@ -54,7 +52,6 @@ TruthTable
 │ T │ F │ F     │
 │ F │ F │ F     │
 └───┴───┴───────┘
-
 
 julia> TruthTables.showmode!()
 :bool
