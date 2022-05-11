@@ -71,7 +71,10 @@ using TruthTables: TruthTable
     end
 
     @testset "TruthTable show" begin
-        # show mode: :bool (default)
+        # default show mode
+        @test TruthTables.showmode!() == :bool
+        
+        # show mode: :bool
         tt = @truthtable p && (q || r)
         str = """
         TruthTable
@@ -186,7 +189,21 @@ using TruthTables: TruthTable
         """
         @test sprint(show, tt) == str
 
-        @test :bool == TruthTables.showmode!()
+        # getformatter
+        TruthTables.showmode!(:bit)
+        @test TruthTables.getformatter() === TruthTables._bit_formatter
+        TruthTables.showmode!(:letter)
+        @test TruthTables.getformatter() === TruthTables._letter_formatter
+        TruthTables.showmode!(:bool)
+        @test TruthTables.getformatter() === nothing
+
+        # formatters
+        @test TruthTables._bit_formatter(true, 1, 1) == 1
+        @test TruthTables._bit_formatter(false, 1, 1) == 0
+        @test TruthTables._letter_formatter(true, 1, 1) == "T"
+        @test TruthTables._letter_formatter(false, 1, 1) == "F"
+
+        # throws
         @test_throws ArgumentError TruthTables.showmode!(:test)
     end
 
