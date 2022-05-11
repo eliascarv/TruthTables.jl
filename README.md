@@ -33,7 +33,7 @@ TruthTable
 └───────┴───────┴───────┘
 ```
 
-The `@truthtable` macro has a optional keyword argument: `full`, 
+The `@truthtable` macro has an optional keyword argument: `full`, 
 if `full` is `true` the truth table will be created in expanded form:
 
 ```julia
@@ -53,7 +53,7 @@ TruthTable
 └───────┴───────┴───────┴───────┴────────┴──────────────┘
 ```
 
-Is possible change the way `TruthTable`s are displayed using `TruthTables.showmode!(mode)` function.
+It is possible to change the way `TruthTable`s are displayed using `TruthTables.showmode!(mode)` function.
 The mode argument can be one of these symbols: `:bool` (default), `:bit` or `:letter`.
 Boolean values (`true` and `false`) will be displayed without formatting in `:bool` mode,
 as `1` and `0` in `:bit` mode and as T and F in `:letter` mode.
