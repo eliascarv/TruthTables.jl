@@ -19,6 +19,10 @@ julia>] add TruthTables
 To create a truth table use the `@truthtable` macro passing a proposition as an argument. 
 The `@truthtable` macro has a optional keyword argument: `full`, 
 if `full` is `true` the truth table will be created in expanded form.\
+Is possible change the way `TruthTable`s are displayed using `TruthTables.showmode!(mode)` function.
+The mode argument can be one of these symbols: `:bool` (default), `:bit` or `:letter`.
+Boolean values (`true` and `false`) will be displayed without formatting in `:bool` mode,
+as `1` and `0` in `:bit` mode and as T and F in `:letter` mode.\
 Some logical operators can be expressed using different symbols.
 This is the list of symbols that can be used:
 
@@ -49,7 +53,6 @@ TruthTable
 │ false │ false │ false │
 └───────┴───────┴───────┘
 
-
 julia> @truthtable p & (~q | r)
 TruthTable
 ┌───────┬───────┬───────┬──────────────┐
@@ -64,7 +67,6 @@ TruthTable
 │ true  │ false │ false │ true         │
 │ false │ false │ false │ false        │
 └───────┴───────┴───────┴──────────────┘
-
 
 julia> @truthtable p & (~q | r) full=true
 TruthTable
@@ -81,58 +83,61 @@ TruthTable
 │ false │ false │ false │ true  │ true   │ false        │
 └───────┴───────┴───────┴───────┴────────┴──────────────┘
 
+julia> TruthTables.showmode!(:bit)
+:bit
+
 julia> @truthtable p ∨ q <--> r
 TruthTable
-┌───────┬───────┬───────┬──────────────┐
-│   p   │   q   │   r   │ p ∨ q <--> r │
-├───────┼───────┼───────┼──────────────┤
-│ true  │ true  │ true  │ true         │
-│ false │ true  │ true  │ true         │
-│ true  │ false │ true  │ true         │
-│ false │ false │ true  │ false        │
-│ true  │ true  │ false │ false        │
-│ false │ true  │ false │ false        │
-│ true  │ false │ false │ false        │
-│ false │ false │ false │ true         │
-└───────┴───────┴───────┴──────────────┘
-
+┌───┬───┬───┬──────────────┐
+│ p │ q │ r │ p ∨ q <--> r │
+├───┼───┼───┼──────────────┤
+│ 1 │ 1 │ 1 │ 1            │
+│ 0 │ 1 │ 1 │ 1            │
+│ 1 │ 0 │ 1 │ 1            │
+│ 0 │ 0 │ 1 │ 0            │
+│ 1 │ 1 │ 0 │ 0            │
+│ 0 │ 1 │ 0 │ 0            │
+│ 1 │ 0 │ 0 │ 0            │
+│ 0 │ 0 │ 0 │ 1            │
+└───┴───┴───┴──────────────┘
 
 julia> @truthtable p ∨ q <--> r full=true
 TruthTable
-┌───────┬───────┬───────┬───────┬──────────────┐
-│   p   │   q   │   r   │ p ∨ q │ p ∨ q <--> r │
-├───────┼───────┼───────┼───────┼──────────────┤
-│ true  │ true  │ true  │ true  │ true         │
-│ false │ true  │ true  │ true  │ true         │
-│ true  │ false │ true  │ true  │ true         │
-│ false │ false │ true  │ false │ false        │
-│ true  │ true  │ false │ true  │ false        │
-│ false │ true  │ false │ true  │ false        │
-│ true  │ false │ false │ true  │ false        │
-│ false │ false │ false │ false │ true         │
-└───────┴───────┴───────┴───────┴──────────────┘
+┌───┬───┬───┬───────┬──────────────┐
+│ p │ q │ r │ p ∨ q │ p ∨ q <--> r │
+├───┼───┼───┼───────┼──────────────┤
+│ 1 │ 1 │ 1 │ 1     │ 1            │
+│ 0 │ 1 │ 1 │ 1     │ 1            │
+│ 1 │ 0 │ 1 │ 1     │ 1            │
+│ 0 │ 0 │ 1 │ 0     │ 0            │
+│ 1 │ 1 │ 0 │ 1     │ 0            │
+│ 0 │ 1 │ 0 │ 1     │ 0            │
+│ 1 │ 0 │ 0 │ 1     │ 0            │
+│ 0 │ 0 │ 0 │ 0     │ 1            │
+└───┴───┴───┴───────┴──────────────┘
 
+julia> TruthTables.showmode!(:letter)
+:letter
 
 julia> @truthtable !(x || y) <--> (!x && !y)
 TruthTable
-┌───────┬───────┬───────────────────────┐
-│   x   │   y   │ ¬(x ∨ y) <--> ¬x ∧ ¬y │
-├───────┼───────┼───────────────────────┤
-│ true  │ true  │ true                  │
-│ false │ true  │ true                  │
-│ true  │ false │ true                  │
-│ false │ false │ true                  │
-└───────┴───────┴───────────────────────┘
-
+┌───┬───┬───────────────────────┐
+│ x │ y │ ¬(x ∨ y) <--> ¬x ∧ ¬y │
+├───┼───┼───────────────────────┤
+│ T │ T │ T                     │
+│ F │ T │ T                     │
+│ T │ F │ T                     │
+│ F │ F │ T                     │
+└───┴───┴───────────────────────┘
 
 julia> @truthtable !(x || y) <--> (!x && !y) full=true
 TruthTable
-┌───────┬───────┬───────┬──────────┬───────┬───────┬─────────┬───────────────────────┐
-│   x   │   y   │ x ∨ y │ ¬(x ∨ y) │  ¬x   │  ¬y   │ ¬x ∧ ¬y │ ¬(x ∨ y) <--> ¬x ∧ ¬y │
-├───────┼───────┼───────┼──────────┼───────┼───────┼─────────┼───────────────────────┤
-│ true  │ true  │ true  │ false    │ false │ false │ false   │ true                  │
-│ false │ true  │ true  │ false    │ true  │ false │ false   │ true                  │
-│ true  │ false │ true  │ false    │ false │ true  │ false   │ true                  │
-│ false │ false │ false │ true     │ true  │ true  │ true    │ true                  │
-└───────┴───────┴───────┴──────────┴───────┴───────┴─────────┴───────────────────────┘
+┌───┬───┬───────┬──────────┬────┬────┬─────────┬───────────────────────┐
+│ x │ y │ x ∨ y │ ¬(x ∨ y) │ ¬x │ ¬y │ ¬x ∧ ¬y │ ¬(x ∨ y) <--> ¬x ∧ ¬y │
+├───┼───┼───────┼──────────┼────┼────┼─────────┼───────────────────────┤
+│ T │ T │ T     │ F        │ F  │ F  │ F       │ T                     │
+│ F │ T │ T     │ F        │ T  │ F  │ F       │ T                     │
+│ T │ F │ T     │ F        │ F  │ T  │ F       │ T                     │
+│ F │ F │ F     │ T        │ T  │ T  │ T       │ T                     │
+└───┴───┴───────┴──────────┴────┴────┴─────────┴───────────────────────┘
 ```
