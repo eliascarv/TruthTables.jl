@@ -95,10 +95,10 @@ TruthTable
 julia> TruthTables.showmode!(:letter)
 :letter
 
-julia> @truthtable !(x || y) <--> (!x && !y)
+julia> @truthtable !(p || q) <--> (!p && !q)
 TruthTable
 ┌───┬───┬───────────────────────┐
-│ x │ y │ ¬(x ∨ y) <--> ¬x ∧ ¬y │
+│ p │ q │ ¬(p ∨ q) <--> ¬p ∧ ¬q │
 ├───┼───┼───────────────────────┤
 │ T │ T │ T                     │
 │ F │ T │ T                     │
@@ -106,10 +106,10 @@ TruthTable
 │ F │ F │ T                     │
 └───┴───┴───────────────────────┘
 
-julia> @truthtable !(x || y) <--> (!x && !y) full=true
+julia> @truthtable !(p || q) <--> (!p && !q) full=true
 TruthTable
 ┌───┬───┬───────┬──────────┬────┬────┬─────────┬───────────────────────┐
-│ x │ y │ x ∨ y │ ¬(x ∨ y) │ ¬x │ ¬y │ ¬x ∧ ¬y │ ¬(x ∨ y) <--> ¬x ∧ ¬y │
+│ p │ q │ p ∨ q │ ¬(p ∨ q) │ ¬p │ ¬q │ ¬p ∧ ¬q │ ¬(p ∨ q) <--> ¬p ∧ ¬q │
 ├───┼───┼───────┼──────────┼────┼────┼─────────┼───────────────────────┤
 │ T │ T │ T     │ F        │ F  │ F  │ F       │ T                     │
 │ F │ T │ T     │ F        │ T  │ F  │ F       │ T                     │
