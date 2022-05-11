@@ -17,6 +17,7 @@ function Base.show(io::IO, table::TruthTable)
         header_alignment=:c, 
         header=table.colnames, 
         formatters=formatter,
+        newline_at_end=false,
         alignment=:l
     )
 end

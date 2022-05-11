@@ -89,8 +89,7 @@ using TruthTables: TruthTable
         │ false │ true  │ false │ false       │
         │ true  │ false │ false │ false       │
         │ false │ false │ false │ false       │
-        └───────┴───────┴───────┴─────────────┘
-        """
+        └───────┴───────┴───────┴─────────────┘"""
         @test sprint(show, tt) == str
 
         # show mode: :bit
@@ -108,8 +107,7 @@ using TruthTables: TruthTable
         │ 0 │ 1 │ 0 │ 0           │
         │ 1 │ 0 │ 0 │ 0           │
         │ 0 │ 0 │ 0 │ 0           │
-        └───┴───┴───┴─────────────┘
-        """
+        └───┴───┴───┴─────────────┘"""
         @test sprint(show, tt) == str
 
         # show mode: :letter
@@ -127,8 +125,7 @@ using TruthTables: TruthTable
         │ F │ T │ F │ F           │
         │ T │ F │ F │ F           │
         │ F │ F │ F │ F           │
-        └───┴───┴───┴─────────────┘
-        """
+        └───┴───┴───┴─────────────┘"""
         @test sprint(show, tt) == str
 
         # show mode: :bool (default)
@@ -147,8 +144,7 @@ using TruthTables: TruthTable
         │ false │ true  │ false │ true  │ false       │
         │ true  │ false │ false │ false │ false       │
         │ false │ false │ false │ false │ false       │
-        └───────┴───────┴───────┴───────┴─────────────┘
-        """
+        └───────┴───────┴───────┴───────┴─────────────┘"""
         @test sprint(show, tt) == str
 
         # show mode: :bit
@@ -166,8 +162,7 @@ using TruthTables: TruthTable
         │ 0 │ 1 │ 0 │ 1     │ 0           │
         │ 1 │ 0 │ 0 │ 0     │ 0           │
         │ 0 │ 0 │ 0 │ 0     │ 0           │
-        └───┴───┴───┴───────┴─────────────┘
-        """
+        └───┴───┴───┴───────┴─────────────┘"""
         @test sprint(show, tt) == str
 
         # show mode: :letter
@@ -185,8 +180,7 @@ using TruthTables: TruthTable
         │ F │ T │ F │ T     │ F           │
         │ T │ F │ F │ F     │ F           │
         │ F │ F │ F │ F     │ F           │
-        └───┴───┴───┴───────┴─────────────┘
-        """
+        └───┴───┴───┴───────┴─────────────┘"""
         @test sprint(show, tt) == str
 
         # getformatter

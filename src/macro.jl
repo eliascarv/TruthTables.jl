@@ -104,7 +104,6 @@ TruthTable
 │ false │ false │ false │
 └───────┴───────┴───────┘
 
-
 julia> @truthtable p & (~q | r)
 TruthTable
 ┌───────┬───────┬───────┬──────────────┐
@@ -119,7 +118,6 @@ TruthTable
 │ true  │ false │ false │ true         │
 │ false │ false │ false │ false        │
 └───────┴───────┴───────┴──────────────┘
-
 
 julia> @truthtable p & (~q | r) full=true
 TruthTable
@@ -136,7 +134,6 @@ TruthTable
 │ false │ false │ false │ true  │ true   │ false        │
 └───────┴───────┴───────┴───────┴────────┴──────────────┘
 
-
 julia> @truthtable p ∨ q <--> r full=false
 TruthTable
 ┌───────┬───────┬───────┬──────────────┐
@@ -151,7 +148,6 @@ TruthTable
 │ true  │ false │ false │ false        │
 │ false │ false │ false │ true         │
 └───────┴───────┴───────┴──────────────┘
-
 
 julia> @truthtable p ∨ q <--> r full=true
 TruthTable
