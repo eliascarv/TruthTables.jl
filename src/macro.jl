@@ -8,13 +8,8 @@ _propname(x::Symbol) = x
 _propname(x::Any) = throw(ArgumentError("$x is not a valid proposition name."))
 
 function _propnames!(props::Vector{Symbol}, expr::Expr)
-    if expr.head == :call
-        args = expr.args[2:end]
-    else
-        args = expr.args
-    end
-    
-    for arg in args
+    b = expr.head == :call ? 2 : 1
+    for arg in expr.args[b:end]
         if arg isa Expr 
             _propnames!(props, arg)
         else
@@ -56,9 +51,9 @@ else
     function exprname(expr::Expr)
         str = string(expr)
         str = replace(str,
-            "&&" => "∧", "&" => "∧",
-            "||" => "∨", "|" => "∨",
-            "!" => "¬", "~" => "¬"
+            r"&{2}|&" => "∧",
+            r"\|{2}|\|" => "∨",
+            r"!|~" => "¬"
         )
         Symbol(str)
     end
