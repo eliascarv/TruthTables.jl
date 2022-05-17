@@ -99,8 +99,8 @@ TruthTable
 │   p   │   q   │ p ∨ q │
 ├───────┼───────┼───────┤
 │ true  │ true  │ true  │
-│ false │ true  │ true  │
 │ true  │ false │ true  │
+│ false │ true  │ true  │
 │ false │ false │ false │
 └───────┴───────┴───────┘
 
@@ -110,12 +110,12 @@ TruthTable
 │   p   │   q   │   r   │ p ∧ (¬q ∨ r) │
 ├───────┼───────┼───────┼──────────────┤
 │ true  │ true  │ true  │ true         │
-│ false │ true  │ true  │ false        │
-│ true  │ false │ true  │ true         │
-│ false │ false │ true  │ false        │
 │ true  │ true  │ false │ false        │
-│ false │ true  │ false │ false        │
+│ true  │ false │ true  │ true         │
 │ true  │ false │ false │ true         │
+│ false │ true  │ true  │ false        │
+│ false │ true  │ false │ false        │
+│ false │ false │ true  │ false        │
 │ false │ false │ false │ false        │
 └───────┴───────┴───────┴──────────────┘
 
@@ -125,12 +125,12 @@ TruthTable
 │   p   │   q   │   r   │  ¬q   │ ¬q ∨ r │ p ∧ (¬q ∨ r) │
 ├───────┼───────┼───────┼───────┼────────┼──────────────┤
 │ true  │ true  │ true  │ false │ true   │ true         │
-│ false │ true  │ true  │ false │ true   │ false        │
-│ true  │ false │ true  │ true  │ true   │ true         │
-│ false │ false │ true  │ true  │ true   │ false        │
 │ true  │ true  │ false │ false │ false  │ false        │
-│ false │ true  │ false │ false │ false  │ false        │
+│ true  │ false │ true  │ true  │ true   │ true         │
 │ true  │ false │ false │ true  │ true   │ true         │
+│ false │ true  │ true  │ false │ true   │ false        │
+│ false │ true  │ false │ false │ false  │ false        │
+│ false │ false │ true  │ true  │ true   │ false        │
 │ false │ false │ false │ true  │ true   │ false        │
 └───────┴───────┴───────┴───────┴────────┴──────────────┘
 
@@ -140,12 +140,12 @@ TruthTable
 │   p   │   q   │   r   │ p ∨ q <--> r │
 ├───────┼───────┼───────┼──────────────┤
 │ true  │ true  │ true  │ true         │
-│ false │ true  │ true  │ true         │
-│ true  │ false │ true  │ true         │
-│ false │ false │ true  │ false        │
 │ true  │ true  │ false │ false        │
-│ false │ true  │ false │ false        │
+│ true  │ false │ true  │ true         │
 │ true  │ false │ false │ false        │
+│ false │ true  │ true  │ true         │
+│ false │ true  │ false │ false        │
+│ false │ false │ true  │ false        │
 │ false │ false │ false │ true         │
 └───────┴───────┴───────┴──────────────┘
 
@@ -155,12 +155,12 @@ TruthTable
 │   p   │   q   │   r   │ p ∨ q │ p ∨ q <--> r │
 ├───────┼───────┼───────┼───────┼──────────────┤
 │ true  │ true  │ true  │ true  │ true         │
-│ false │ true  │ true  │ true  │ true         │
-│ true  │ false │ true  │ true  │ true         │
-│ false │ false │ true  │ false │ false        │
 │ true  │ true  │ false │ true  │ false        │
-│ false │ true  │ false │ true  │ false        │
+│ true  │ false │ true  │ true  │ true         │
 │ true  │ false │ false │ true  │ false        │
+│ false │ true  │ true  │ true  │ true         │
+│ false │ true  │ false │ true  │ false        │
+│ false │ false │ true  │ false │ false        │
 │ false │ false │ false │ false │ true         │
 └───────┴───────┴───────┴───────┴──────────────┘
 ```
@@ -175,9 +175,9 @@ end
 
 function _truthtable(expr::Expr, full::Bool)
     colnames = propnames(expr)
-    bools = fill([true, false], length(colnames))
-    rows = Iterators.product(bools...)
-    columns = [vec([row[i] for row in rows]) for i in eachindex(colnames)]
+    n = length(colnames)
+    rows = Iterators.product(fill([true, false], n)...)
+    columns = [vec([row[i] for row in rows]) for i in n:-1:1]
     colexprs = Expr[]
 
     if full
