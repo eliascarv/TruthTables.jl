@@ -20,8 +20,8 @@ TruthTable
 │   p   │   q   │ p ∧ q │
 ├───────┼───────┼───────┤
 │ true  │ true  │ true  │
-│ false │ true  │ false │
 │ true  │ false │ false │
+│ false │ true  │ false │
 │ false │ false │ false │
 └───────┴───────┴───────┘
 
@@ -34,8 +34,8 @@ TruthTable
 │ p │ q │ p ∧ q │
 ├───┼───┼───────┤
 │ 1 │ 1 │ 1     │
-│ 0 │ 1 │ 0     │
 │ 1 │ 0 │ 0     │
+│ 0 │ 1 │ 0     │
 │ 0 │ 0 │ 0     │
 └───┴───┴───────┘
 
@@ -48,8 +48,8 @@ TruthTable
 │ p │ q │ p ∧ q │
 ├───┼───┼───────┤
 │ T │ T │ T     │
-│ F │ T │ F     │
 │ T │ F │ F     │
+│ F │ T │ F     │
 │ F │ F │ F     │
 └───┴───┴───────┘
 
@@ -62,8 +62,8 @@ TruthTable
 │   p   │   q   │ p ∧ q │
 ├───────┼───────┼───────┤
 │ true  │ true  │ true  │
-│ false │ true  │ false │
 │ true  │ false │ false │
+│ false │ true  │ false │
 │ false │ false │ false │
 └───────┴───────┴───────┘
 ```

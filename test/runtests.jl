@@ -44,28 +44,28 @@ using TruthTables: TruthTable
 
     @testset "@truthtable" begin
         tt = @truthtable p || q
-        @test Tables.getcolumn(tt, 1) == Bool[1, 0, 1, 0]
-        @test Tables.getcolumn(tt, 2) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, 1) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, 2) == Bool[1, 0, 1, 0]
         @test Tables.getcolumn(tt, 3) == Bool[1, 1, 1, 0]
-        @test Tables.getcolumn(tt, :p) == Bool[1, 0, 1, 0]
-        @test Tables.getcolumn(tt, :q) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, :p) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, :q) == Bool[1, 0, 1, 0]
         @test Tables.getcolumn(tt, Symbol("p ∨ q")) == Bool[1, 1, 1, 0]
 
         tt = @truthtable !(x || y) <--> (!x && !y) full=true
-        @test Tables.getcolumn(tt, 1) == Bool[1, 0, 1, 0]
-        @test Tables.getcolumn(tt, 2) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, 1) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, 2) == Bool[1, 0, 1, 0]
         @test Tables.getcolumn(tt, 3) == Bool[1, 1, 1, 0]
         @test Tables.getcolumn(tt, 4) == Bool[0, 0, 0, 1]
-        @test Tables.getcolumn(tt, 5) == Bool[0, 1, 0, 1]
-        @test Tables.getcolumn(tt, 6) == Bool[0, 0, 1, 1]
+        @test Tables.getcolumn(tt, 5) == Bool[0, 0, 1, 1]
+        @test Tables.getcolumn(tt, 6) == Bool[0, 1, 0, 1]
         @test Tables.getcolumn(tt, 7) == Bool[0, 0, 0, 1]
         @test Tables.getcolumn(tt, 8) == Bool[1, 1, 1, 1]
-        @test Tables.getcolumn(tt, :x) == Bool[1, 0, 1, 0]
-        @test Tables.getcolumn(tt, :y) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, :x) == Bool[1, 1, 0, 0]
+        @test Tables.getcolumn(tt, :y) == Bool[1, 0, 1, 0]
         @test Tables.getcolumn(tt, Symbol("x ∨ y")) == Bool[1, 1, 1, 0]
         @test Tables.getcolumn(tt, Symbol("¬(x ∨ y)")) == Bool[0, 0, 0, 1]
-        @test Tables.getcolumn(tt, Symbol("¬x")) == Bool[0, 1, 0, 1]
-        @test Tables.getcolumn(tt, Symbol("¬y")) == Bool[0, 0, 1, 1]
+        @test Tables.getcolumn(tt, Symbol("¬x")) == Bool[0, 0, 1, 1]
+        @test Tables.getcolumn(tt, Symbol("¬y")) == Bool[0, 1, 0, 1]
         @test Tables.getcolumn(tt, Symbol("¬x ∧ ¬y")) == Bool[0, 0, 0, 1]
         @test Tables.getcolumn(tt, Symbol("¬(x ∨ y) <--> ¬x ∧ ¬y")) == Bool[1, 1, 1, 1]
     end
@@ -82,12 +82,12 @@ using TruthTables: TruthTable
         │   p   │   q   │   r   │ p ∧ (q ∨ r) │
         ├───────┼───────┼───────┼─────────────┤
         │ true  │ true  │ true  │ true        │
-        │ false │ true  │ true  │ false       │
-        │ true  │ false │ true  │ true        │
-        │ false │ false │ true  │ false       │
         │ true  │ true  │ false │ true        │
-        │ false │ true  │ false │ false       │
+        │ true  │ false │ true  │ true        │
         │ true  │ false │ false │ false       │
+        │ false │ true  │ true  │ false       │
+        │ false │ true  │ false │ false       │
+        │ false │ false │ true  │ false       │
         │ false │ false │ false │ false       │
         └───────┴───────┴───────┴─────────────┘"""
         @test sprint(show, tt) == str
@@ -100,12 +100,12 @@ using TruthTables: TruthTable
         │ p │ q │ r │ p ∧ (q ∨ r) │
         ├───┼───┼───┼─────────────┤
         │ 1 │ 1 │ 1 │ 1           │
-        │ 0 │ 1 │ 1 │ 0           │
-        │ 1 │ 0 │ 1 │ 1           │
-        │ 0 │ 0 │ 1 │ 0           │
         │ 1 │ 1 │ 0 │ 1           │
-        │ 0 │ 1 │ 0 │ 0           │
+        │ 1 │ 0 │ 1 │ 1           │
         │ 1 │ 0 │ 0 │ 0           │
+        │ 0 │ 1 │ 1 │ 0           │
+        │ 0 │ 1 │ 0 │ 0           │
+        │ 0 │ 0 │ 1 │ 0           │
         │ 0 │ 0 │ 0 │ 0           │
         └───┴───┴───┴─────────────┘"""
         @test sprint(show, tt) == str
@@ -118,12 +118,12 @@ using TruthTables: TruthTable
         │ p │ q │ r │ p ∧ (q ∨ r) │
         ├───┼───┼───┼─────────────┤
         │ T │ T │ T │ T           │
-        │ F │ T │ T │ F           │
-        │ T │ F │ T │ T           │
-        │ F │ F │ T │ F           │
         │ T │ T │ F │ T           │
-        │ F │ T │ F │ F           │
+        │ T │ F │ T │ T           │
         │ T │ F │ F │ F           │
+        │ F │ T │ T │ F           │
+        │ F │ T │ F │ F           │
+        │ F │ F │ T │ F           │
         │ F │ F │ F │ F           │
         └───┴───┴───┴─────────────┘"""
         @test sprint(show, tt) == str
@@ -137,12 +137,12 @@ using TruthTables: TruthTable
         │   p   │   q   │   r   │ q ∨ r │ p ∧ (q ∨ r) │
         ├───────┼───────┼───────┼───────┼─────────────┤
         │ true  │ true  │ true  │ true  │ true        │
-        │ false │ true  │ true  │ true  │ false       │
-        │ true  │ false │ true  │ true  │ true        │
-        │ false │ false │ true  │ true  │ false       │
         │ true  │ true  │ false │ true  │ true        │
-        │ false │ true  │ false │ true  │ false       │
+        │ true  │ false │ true  │ true  │ true        │
         │ true  │ false │ false │ false │ false       │
+        │ false │ true  │ true  │ true  │ false       │
+        │ false │ true  │ false │ true  │ false       │
+        │ false │ false │ true  │ true  │ false       │
         │ false │ false │ false │ false │ false       │
         └───────┴───────┴───────┴───────┴─────────────┘"""
         @test sprint(show, tt) == str
@@ -155,12 +155,12 @@ using TruthTables: TruthTable
         │ p │ q │ r │ q ∨ r │ p ∧ (q ∨ r) │
         ├───┼───┼───┼───────┼─────────────┤
         │ 1 │ 1 │ 1 │ 1     │ 1           │
-        │ 0 │ 1 │ 1 │ 1     │ 0           │
-        │ 1 │ 0 │ 1 │ 1     │ 1           │
-        │ 0 │ 0 │ 1 │ 1     │ 0           │
         │ 1 │ 1 │ 0 │ 1     │ 1           │
-        │ 0 │ 1 │ 0 │ 1     │ 0           │
+        │ 1 │ 0 │ 1 │ 1     │ 1           │
         │ 1 │ 0 │ 0 │ 0     │ 0           │
+        │ 0 │ 1 │ 1 │ 1     │ 0           │
+        │ 0 │ 1 │ 0 │ 1     │ 0           │
+        │ 0 │ 0 │ 1 │ 1     │ 0           │
         │ 0 │ 0 │ 0 │ 0     │ 0           │
         └───┴───┴───┴───────┴─────────────┘"""
         @test sprint(show, tt) == str
@@ -173,12 +173,12 @@ using TruthTables: TruthTable
         │ p │ q │ r │ q ∨ r │ p ∧ (q ∨ r) │
         ├───┼───┼───┼───────┼─────────────┤
         │ T │ T │ T │ T     │ T           │
-        │ F │ T │ T │ T     │ F           │
-        │ T │ F │ T │ T     │ T           │
-        │ F │ F │ T │ T     │ F           │
         │ T │ T │ F │ T     │ T           │
-        │ F │ T │ F │ T     │ F           │
+        │ T │ F │ T │ T     │ T           │
         │ T │ F │ F │ F     │ F           │
+        │ F │ T │ T │ T     │ F           │
+        │ F │ T │ F │ T     │ F           │
+        │ F │ F │ T │ T     │ F           │
         │ F │ F │ F │ F     │ F           │
         └───┴───┴───┴───────┴─────────────┘"""
         @test sprint(show, tt) == str
