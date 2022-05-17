@@ -68,6 +68,15 @@ using TruthTables: TruthTable
         @test Tables.getcolumn(tt, Symbol("¬y")) == Bool[0, 1, 0, 1]
         @test Tables.getcolumn(tt, Symbol("¬x ∧ ¬y")) == Bool[0, 0, 0, 1]
         @test Tables.getcolumn(tt, Symbol("¬(x ∨ y) <--> ¬x ∧ ¬y")) == Bool[1, 1, 1, 1]
+
+        # helper functions
+        expr = :(p && q --> r)
+        @test TruthTables.propnames(expr) == [:p, :q, :r]
+        @test TruthTables.getsubexprs(expr) == [:(p && q), :(p && q --> r)]
+        @test TruthTables.exprname(expr) == Symbol("p ∧ q --> r")
+
+        @test_throws ArgumentError TruthTables._propname(1)
+        @test_throws ArgumentError TruthTables._kwarg(:(full => true))
     end
 
     @testset "TruthTable show" begin
