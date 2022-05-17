@@ -4,8 +4,8 @@
 ∨(x::Bool, y::Bool) = x || y
 ¬(x::Bool) = !x
 
+_propname(x) = throw(ArgumentError("$x is not a valid proposition name."))
 _propname(x::Symbol) = x
-_propname(x::Any) = throw(ArgumentError("$x is not a valid proposition name."))
 
 function _propnames!(props::Vector{Symbol}, expr::Expr)
     b = expr.head == :call ? 2 : 1
