@@ -226,6 +226,11 @@ using TruthTables: TruthTable
         @test (false --> true) == true
         @test (false --> false) == true
 
+        @test (true → true) == true
+        @test (true → false) == false
+        @test (false → true) == true
+        @test (false → false) == true
+
         @test (true <--> true) == true
         @test (true <--> false) == false
         @test (false <--> true) == false
