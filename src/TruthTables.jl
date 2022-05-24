@@ -4,7 +4,7 @@ using Tables, PrettyTables
 
 export @truthtable
 export -->, <-->
-export ∧, ∨, ¬
+export ∧, ∨, ¬, →
 
 include("showmode.jl")
 include("truthtable.jl")
