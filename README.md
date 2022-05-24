@@ -129,7 +129,7 @@ This is the list of symbols that can be used:
 | XOR  | `⊻` (`\xor<tab>`) |
 | NAND | `⊼` (`\nand<tab>`) |
 | NOR  | `⊽` (`\nor<tab>`) |
-| IMPLICATION | `-->` |
+| IMPLICATION | `-->`, `→` (`\to<tab>` or `\rightarrow<tab>`) |
 | EQUIVALENCE | `<-->`, `≡` (`\equiv<tab>`) |
 
 Examples:

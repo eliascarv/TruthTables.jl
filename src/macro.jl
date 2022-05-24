@@ -1,4 +1,5 @@
 (-->)(x::Bool, y::Bool) = !x || y
+(→)(x::Bool, y::Bool) = !x || y
 (<-->)(x::Bool, y::Bool) = x ≡ y
 ∧(x::Bool, y::Bool) = x && y
 ∨(x::Bool, y::Bool) = x || y
@@ -82,7 +83,7 @@ If `full` is `true`, the truth table will be created in expanded form.
 * XOR: `⊻` (`\\xor<tab>`)
 * NAND: `⊼` (`\\nand<tab>`)
 * NOR: `⊽` (`\\nor<tab>`)
-* IMPLICATION: `-->`
+* IMPLICATION: `-->`, `→` (`\\to<tab>` or `\\rightarrow<tab>`)
 * EQUIVALENCE: `<-->`, `≡` (`\\equiv<tab>`)
 
 # Examples
