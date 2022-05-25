@@ -4,6 +4,36 @@
 ∨(x::Bool, y::Bool) = x || y
 ¬(x::Bool) = !x
 
+const OPRS = (
+    :&, :∧,
+    :|, :∨,
+    :!, :~, :¬,
+    :⊻, :⊼, :⊽,
+    :(-->),
+    :(<-->), :(===), :≡
+)
+
+function preprocess!(expr::Expr)
+    if expr.head == :(-->)
+        expr.head = :call
+        expr.args = [:(-->); expr.args]
+    end
+
+    if expr.head ∈ (:&&, :||)
+        args = expr.args
+    elseif expr.head == :call && expr.args[1] ∈ OPRS
+        args = expr.args[2:end]
+    else
+        throw(ArgumentError("Expression with invalid operator."))
+    end
+
+    for arg in args
+        if arg isa Expr
+            preprocess!(arg)
+        end
+    end 
+end
+
 _propname(x) = throw(ArgumentError("$x is not a valid proposition name."))
 _propname(x::Symbol) = x
 
@@ -58,36 +88,6 @@ else
         )
         Symbol(str)
     end
-end
-
-const OPRS = (
-    :&, :∧,
-    :|, :∨,
-    :!, :~, :¬,
-    :⊻, :⊼, :⊽,
-    :(-->),
-    :(<-->), :(===), :≡
-)
-
-function preprocess!(expr::Expr)
-    if expr.head == :(-->)
-        expr.head = :call
-        expr.args = [:(-->); expr.args]
-    end
-
-    if expr.head ∈ (:&&, :||)
-        args = expr.args
-    elseif expr.head == :call && expr.args[1] ∈ OPRS
-        args = expr.args[2:end]
-    else
-        throw(ArgumentError("Expression with invalid operator."))
-    end
-
-    for arg in args
-        if arg isa Expr
-            preprocess!(arg)
-        end
-    end 
 end
 
 function _kwarg(expr::Expr)::Bool
