@@ -75,9 +75,12 @@ using TruthTables: ∧, ∨, -->, <-->, ¬
         @test TruthTables.propnames(expr) == [:p, :q, :r]
         @test TruthTables.getsubexprs(expr) == [:(p && q), :(p && q --> r)]
         @test TruthTables.exprname(expr) == Symbol("p ∧ q --> r")
+        TruthTables.preprocess!(expr)
+        @test expr.head == :call && expr.args[1] == :(-->)
 
         @test_throws ArgumentError TruthTables._propname(1)
         @test_throws ArgumentError TruthTables._kwarg(:(full => true))
+        @test_throws ArgumentError TruthTables.preprocess!(:(p + q))
     end
 
     @testset "TruthTable show" begin
