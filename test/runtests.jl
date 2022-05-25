@@ -1,6 +1,7 @@
 using Test, Tables
 using TruthTables
 using TruthTables: TruthTable
+using TruthTables: ∧, ∨, -->, <-->, ¬
 
 @testset "TruthTables.jl" begin
     @testset "TruthTable" begin
