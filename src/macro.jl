@@ -26,7 +26,8 @@ function propnames(expr::Expr)
 end
 
 function _getsubexprs!(exprs::Vector{Expr}, expr::Expr)
-    for arg in reverse(expr.args)
+    b = expr.head == :call ? 2 : 1
+    for arg in expr.args[end:-1:b]
         if arg isa Expr
             pushfirst!(exprs, arg)
             _getsubexprs!(exprs, arg)
@@ -59,7 +60,36 @@ else
     end
 end
 
-function _kwarg(expr::Expr)
+const OPRS = (
+    :&, :∧,
+    :|, :∨,
+    :⊻, :⊼, :⊽,
+    :(-->),
+    :(<-->), :(===), :≡
+)
+
+function preprocess!(expr::Expr)
+    if expr.head == :(-->)
+        expr.head = :call
+        expr.args = [:(-->); expr.args]
+    end
+
+    if expr.head ∈ (:&&, :||)
+        args = expr.args
+    elseif expr.head == :call && expr.args[1] ∈ OPRS
+        args = expr.args[2:end]
+    else
+        throw(ArgumentError("Expression with invalid oprator."))
+    end
+
+    for arg in args
+        if arg isa Expr
+            preprocess!(arg)
+        end
+    end 
+end
+
+function _kwarg(expr::Expr)::Bool
     if expr.head == :(=) && expr.args[1] == :full
         return expr.args[2] 
     end
@@ -169,10 +199,12 @@ macro truthtable(expr)
 end
 
 function _truthtable(expr::Expr, full::Bool)
+    preprocess!(expr)
+
     colnames = propnames(expr)
     n = length(colnames)
     rows = Iterators.product(fill([true, false], n)...)
-    columns = [vec([row[i] for row in rows]) for i in n:-1:1]
+    columns = Vector{Bool}[vec([row[i] for row in rows]) for i in n:-1:1]
     colexprs = Expr[]
 
     if full
