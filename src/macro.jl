@@ -80,7 +80,7 @@ function preprocess!(expr::Expr)
     elseif expr.head == :call && expr.args[1] ∈ OPRS
         args = expr.args[2:end]
     else
-        throw(ArgumentError("Expression with invalid oprator."))
+        throw(ArgumentError("Expression with invalid operator."))
     end
 
     for arg in args
