@@ -21,8 +21,8 @@ If `full` is `true`, the truth table will be created in expanded form.
 * XOR: `⊻` (`\\xor<tab>`)
 * NAND: `⊼` (`\\nand<tab>`)
 * NOR: `⊽` (`\\nor<tab>`)
-* IMPLICATION: `-->`, `→` (`\\to<tab>` or `\\rightarrow<tab>`)
-* EQUIVALENCE: `<-->`, `≡` (`\\equiv<tab>`)
+* IMPLICATION: `-->`, `→` (`\\to<tab>` or `\\rightarrow<tab>`), `⇒` ( `\\Rightarrow<tab>`)
+* EQUIVALENCE: `<-->`, `≡` (`\\equiv<tab>`), `↔` (`\\leftrightarrow<tab>`), `⇔` (`\\Leftrightarrow<tab>`)
 
 # Examples
 
