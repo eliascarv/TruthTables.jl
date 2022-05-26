@@ -1,6 +1,7 @@
 using Test, Tables
 using TruthTables
 using TruthTables: TruthTable
+using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
 
 @testset "TruthTables.jl" begin
     @testset "TruthTable" begin
@@ -74,9 +75,12 @@ using TruthTables: TruthTable
         @test TruthTables.propnames(expr) == [:p, :q, :r]
         @test TruthTables.getsubexprs(expr) == [:(p && q), :(p && q --> r)]
         @test TruthTables.exprname(expr) == Symbol("p ∧ q --> r")
+        TruthTables.preprocess!(expr)
+        @test expr.head == :call && expr.args[1] == :(-->)
 
         @test_throws ArgumentError TruthTables._propname(1)
         @test_throws ArgumentError TruthTables._kwarg(:(full => true))
+        @test_throws ArgumentError TruthTables.preprocess!(:(p + q))
     end
 
     @testset "TruthTable show" begin
@@ -228,16 +232,20 @@ using TruthTables: TruthTable
 
         @test (true → true) == true
         @test (true → false) == false
-        @test (false → true) == true
-        @test (false → false) == true
+        @test (false ⇒ true) == true
+        @test (false ⇒ false) == true
 
         @test (true <--> true) == true
         @test (true <--> false) == false
         @test (false <--> true) == false
         @test (false <--> false) == true
 
+        @test (true ↔ true) == true
+        @test (true ↔ false) == false
+        @test (false ⇔ true) == false
+        @test (false ⇔ false) == true
+
         @test ¬true == false
         @test ¬false == true
     end
 end
-

@@ -1,66 +1,4 @@
-(-->)(x::Bool, y::Bool) = !x || y
-→(x::Bool, y::Bool) = !x || y
-(<-->)(x::Bool, y::Bool) = x ≡ y
-∧(x::Bool, y::Bool) = x && y
-∨(x::Bool, y::Bool) = x || y
-¬(x::Bool) = !x
-
-_propname(x) = throw(ArgumentError("$x is not a valid proposition name."))
-_propname(x::Symbol) = x
-
-function _propnames!(props::Vector{Symbol}, expr::Expr)
-    b = expr.head == :call ? 2 : 1
-    for arg in expr.args[b:end]
-        if arg isa Expr 
-            _propnames!(props, arg)
-        else
-            push!(props, _propname(arg))
-        end
-    end
-end
-
-function propnames(expr::Expr)
-    props = Symbol[]
-    _propnames!(props, expr)
-    unique!(props)
-    return props
-end
-
-function _getsubexprs!(exprs::Vector{Expr}, expr::Expr)
-    for arg in reverse(expr.args)
-        if arg isa Expr
-            pushfirst!(exprs, arg)
-            _getsubexprs!(exprs, arg)
-        end
-    end
-end
-
-function getsubexprs(expr::Expr)
-    exprs = [expr]
-    _getsubexprs!(exprs, expr)
-    return exprs
-end
-
-@static if VERSION < v"1.7"
-    function exprname(expr::Expr)
-        str = string(expr)
-        str = replace(str, r"&{2}|&" => "∧")
-        str = replace(str, r"\|{2}|\|" => "∨")
-        Symbol(replace(str, r"!|~" => "¬"))
-    end
-else
-    function exprname(expr::Expr)
-        str = string(expr)
-        str = replace(str,
-            r"&{2}|&" => "∧",
-            r"\|{2}|\|" => "∨",
-            r"!|~" => "¬"
-        )
-        Symbol(str)
-    end
-end
-
-function _kwarg(expr::Expr)
+function _kwarg(expr::Expr)::Bool
     if expr.head == :(=) && expr.args[1] == :full
         return expr.args[2] 
     end
@@ -170,10 +108,12 @@ macro truthtable(expr)
 end
 
 function _truthtable(expr::Expr, full::Bool)
+    preprocess!(expr)
+
     colnames = propnames(expr)
     n = length(colnames)
     rows = Iterators.product(fill([true, false], n)...)
-    columns = [vec([row[i] for row in rows]) for i in n:-1:1]
+    columns = Vector{Bool}[vec([row[i] for row in rows]) for i in n:-1:1]
     colexprs = Expr[]
 
     if full
