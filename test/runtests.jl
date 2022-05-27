@@ -1,7 +1,7 @@
 using Test, Tables
 using TruthTables
 using TruthTables: TruthTable
-using TruthTables: ∧, ∨, -->, <-->, ¬
+using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
 
 @testset "TruthTables.jl" begin
     @testset "TruthTable" begin
@@ -230,13 +230,22 @@ using TruthTables: ∧, ∨, -->, <-->, ¬
         @test (false --> true) == true
         @test (false --> false) == true
 
+        @test (true → true) == true
+        @test (true → false) == false
+        @test (false ⇒ true) == true
+        @test (false ⇒ false) == true
+
         @test (true <--> true) == true
         @test (true <--> false) == false
         @test (false <--> true) == false
         @test (false <--> false) == true
 
+        @test (true ↔ true) == true
+        @test (true ↔ false) == false
+        @test (false ⇔ true) == false
+        @test (false ⇔ false) == true
+
         @test ¬true == false
         @test ¬false == true
     end
 end
-
