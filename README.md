@@ -3,12 +3,11 @@
 [![Build Status](https://github.com/eliascarv/TruthTables.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/eliascarv/TruthTables.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/eliascarv/TruthTables.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/eliascarv/TruthTables.jl)
 
-`TruthTables.jl` is a simple package to create truth tables using Julia expressions.
-This package was created for educational purposes.
+TruthTables.jl was created for educational purposes and generate truth tables by passing Julia expressions in the macro `@truthtable`.
 
 ## Installation
 
-To install TruthTables.jl use Julia's package manager:
+To install TruthTables.jl, use the Julia's package manager, Pkg.jl:
 
 ```julia
 julia>] add TruthTables
@@ -27,14 +26,13 @@ TruthTable
 │   p   │   q   │ p ∨ q │
 ├───────┼───────┼───────┤
 │ true  │ true  │ true  │
-│ false │ true  │ true  │
 │ true  │ false │ true  │
+│ false │ true  │ true  │
 │ false │ false │ false │
 └───────┴───────┴───────┘
 ```
 
-The `@truthtable` macro has an optional keyword argument: `full`, 
-if `full` is `true` the truth table will be created in expanded form:
+The `@truthtable` macro has an optional keyword argument: `full`. If `full` is `true`, the truth table will be created in expanded form.
 
 ```julia
 julia> @truthtable p && (!q || r) full=true
@@ -43,12 +41,12 @@ TruthTable
 │   p   │   q   │   r   │  ¬q   │ ¬q ∨ r │ p ∧ (¬q ∨ r) │
 ├───────┼───────┼───────┼───────┼────────┼──────────────┤
 │ true  │ true  │ true  │ false │ true   │ true         │
-│ false │ true  │ true  │ false │ true   │ false        │
-│ true  │ false │ true  │ true  │ true   │ true         │
-│ false │ false │ true  │ true  │ true   │ false        │
 │ true  │ true  │ false │ false │ false  │ false        │
-│ false │ true  │ false │ false │ false  │ false        │
+│ true  │ false │ true  │ true  │ true   │ true         │
 │ true  │ false │ false │ true  │ true   │ true         │
+│ false │ true  │ true  │ false │ true   │ false        │
+│ false │ true  │ false │ false │ false  │ false        │
+│ false │ false │ true  │ true  │ true   │ false        │
 │ false │ false │ false │ true  │ true   │ false        │
 └───────┴───────┴───────┴───────┴────────┴──────────────┘
 ```
@@ -68,12 +66,12 @@ TruthTable
 │ p │ q │ r │ p ∨ q <--> r │
 ├───┼───┼───┼──────────────┤
 │ 1 │ 1 │ 1 │ 1            │
-│ 0 │ 1 │ 1 │ 1            │
-│ 1 │ 0 │ 1 │ 1            │
-│ 0 │ 0 │ 1 │ 0            │
 │ 1 │ 1 │ 0 │ 0            │
-│ 0 │ 1 │ 0 │ 0            │
+│ 1 │ 0 │ 1 │ 1            │
 │ 1 │ 0 │ 0 │ 0            │
+│ 0 │ 1 │ 1 │ 1            │
+│ 0 │ 1 │ 0 │ 0            │
+│ 0 │ 0 │ 1 │ 0            │
 │ 0 │ 0 │ 0 │ 1            │
 └───┴───┴───┴──────────────┘
 
@@ -83,12 +81,12 @@ TruthTable
 │ p │ q │ r │ p ∨ q │ p ∨ q <--> r │
 ├───┼───┼───┼───────┼──────────────┤
 │ 1 │ 1 │ 1 │ 1     │ 1            │
-│ 0 │ 1 │ 1 │ 1     │ 1            │
-│ 1 │ 0 │ 1 │ 1     │ 1            │
-│ 0 │ 0 │ 1 │ 0     │ 0            │
 │ 1 │ 1 │ 0 │ 1     │ 0            │
-│ 0 │ 1 │ 0 │ 1     │ 0            │
+│ 1 │ 0 │ 1 │ 1     │ 1            │
 │ 1 │ 0 │ 0 │ 1     │ 0            │
+│ 0 │ 1 │ 1 │ 1     │ 1            │
+│ 0 │ 1 │ 0 │ 1     │ 0            │
+│ 0 │ 0 │ 1 │ 0     │ 0            │
 │ 0 │ 0 │ 0 │ 0     │ 1            │
 └───┴───┴───┴───────┴──────────────┘
 
@@ -101,8 +99,8 @@ TruthTable
 │ p │ q │ ¬(p ∨ q) <--> ¬p ∧ ¬q │
 ├───┼───┼───────────────────────┤
 │ T │ T │ T                     │
-│ F │ T │ T                     │
 │ T │ F │ T                     │
+│ F │ T │ T                     │
 │ F │ F │ T                     │
 └───┴───┴───────────────────────┘
 
@@ -112,14 +110,14 @@ TruthTable
 │ p │ q │ p ∨ q │ ¬(p ∨ q) │ ¬p │ ¬q │ ¬p ∧ ¬q │ ¬(p ∨ q) <--> ¬p ∧ ¬q │
 ├───┼───┼───────┼──────────┼────┼────┼─────────┼───────────────────────┤
 │ T │ T │ T     │ F        │ F  │ F  │ F       │ T                     │
-│ F │ T │ T     │ F        │ T  │ F  │ F       │ T                     │
 │ T │ F │ T     │ F        │ F  │ T  │ F       │ T                     │
+│ F │ T │ T     │ F        │ T  │ F  │ F       │ T                     │
 │ F │ F │ F     │ T        │ T  │ T  │ T       │ T                     │
 └───┴───┴───────┴──────────┴────┴────┴─────────┴───────────────────────┘
 ```
 
 Some logical operators can be expressed using different symbols.
-This is the list of symbols that can be used:
+This is the list of available symbols:
 
 | Operator | Symbols |
 |-----------|-------------|
@@ -144,12 +142,12 @@ TruthTable
 │   p   │   q   │   r   │ ¬p ∧ (q ∨ r) │
 ├───────┼───────┼───────┼──────────────┤
 │ true  │ true  │ true  │ false        │
-│ false │ true  │ true  │ true         │
-│ true  │ false │ true  │ false        │
-│ false │ false │ true  │ true         │
 │ true  │ true  │ false │ false        │
-│ false │ true  │ false │ true         │
+│ true  │ false │ true  │ false        │
 │ true  │ false │ false │ false        │
+│ false │ true  │ true  │ true         │
+│ false │ true  │ false │ true         │
+│ false │ false │ true  │ true         │
 │ false │ false │ false │ false        │
 └───────┴───────┴───────┴──────────────┘
 
@@ -159,12 +157,12 @@ TruthTable
 │   p   │   q   │   r   │  ¬p   │ q ∨ r │ ¬p ∧ (q ∨ r) │
 ├───────┼───────┼───────┼───────┼───────┼──────────────┤
 │ true  │ true  │ true  │ false │ true  │ false        │
-│ false │ true  │ true  │ true  │ true  │ true         │
-│ true  │ false │ true  │ false │ true  │ false        │
-│ false │ false │ true  │ true  │ true  │ true         │
 │ true  │ true  │ false │ false │ true  │ false        │
-│ false │ true  │ false │ true  │ true  │ true         │
+│ true  │ false │ true  │ false │ true  │ false        │
 │ true  │ false │ false │ false │ false │ false        │
+│ false │ true  │ true  │ true  │ true  │ true         │
+│ false │ true  │ false │ true  │ true  │ true         │
+│ false │ false │ true  │ true  │ true  │ true         │
 │ false │ false │ false │ true  │ false │ false        │
 └───────┴───────┴───────┴───────┴───────┴──────────────┘
 
@@ -177,8 +175,8 @@ TruthTable
 │ p │ q │ (p --> q) ≡ ¬p ∨ q │
 ├───┼───┼────────────────────┤
 │ 1 │ 1 │ 1                  │
-│ 0 │ 1 │ 1                  │
 │ 1 │ 0 │ 1                  │
+│ 0 │ 1 │ 1                  │
 │ 0 │ 0 │ 1                  │
 └───┴───┴────────────────────┘
 
@@ -188,8 +186,8 @@ TruthTable
 │ p │ q │ p --> q │ ¬p │ ¬p ∨ q │ (p --> q) ≡ ¬p ∨ q │
 ├───┼───┼─────────┼────┼────────┼────────────────────┤
 │ 1 │ 1 │ 1       │ 0  │ 1      │ 1                  │
-│ 0 │ 1 │ 1       │ 1  │ 1      │ 1                  │
 │ 1 │ 0 │ 0       │ 0  │ 0      │ 1                  │
+│ 0 │ 1 │ 1       │ 1  │ 1      │ 1                  │
 │ 0 │ 0 │ 1       │ 1  │ 1      │ 1                  │
 └───┴───┴─────────┴────┴────────┴────────────────────┘
 ```
