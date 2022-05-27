@@ -70,7 +70,10 @@ end
         str = string(expr)
         str = replace(str, r"&{2}|&" => "∧")
         str = replace(str, r"\|{2}|\|" => "∨")
-        Symbol(replace(str, r"!|~" => "¬"))
+        str = replace(str, r"!|~" => "¬")
+        str = replace(str, r"→|⇒" => "-->")
+        str = replace(str, r"↔|⇔" => "<-->")
+        Symbol(replace(str, "===" => "≡"))
     end
 else
     function exprname(expr::Expr)
@@ -78,7 +81,10 @@ else
         str = replace(str,
             r"&{2}|&" => "∧",
             r"\|{2}|\|" => "∨",
-            r"!|~" => "¬"
+            r"!|~" => "¬",
+            r"→|⇒" => "-->",
+            r"↔|⇔" => "<-->",
+            "===" => "≡"
         )
         Symbol(str)
     end
