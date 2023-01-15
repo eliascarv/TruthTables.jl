@@ -1,23 +1,23 @@
 struct TruthTable
-    columns::Vector{Vector{Bool}}
-    colindex::Dict{Symbol, Int}
-    colnames::Vector{Symbol}
+  columns::Vector{Vector{Bool}}
+  colindex::Dict{Symbol,Int}
+  colnames::Vector{Symbol}
 end
 
 function TruthTable(columns::Vector{Vector{Bool}}, colnames::Vector{Symbol})
-    colindex = Dict(k => i for (i, k) in pairs(colnames))
-    TruthTable(columns, colindex, colnames)
+  colindex = Dict(k => i for (i, k) in pairs(colnames))
+  TruthTable(columns, colindex, colnames)
 end
 
 function Base.show(io::IO, table::TruthTable)
-    formatter = getformatter()
-    println(io, "TruthTable")
-    pretty_table(io, table, 
-        vcrop_mode=:middle, 
-        header_alignment=:c, 
-        header=table.colnames, 
-        formatters=formatter,
-        newline_at_end=false,
-        alignment=:l
-    )
+  formatter = getformatter()
+  println(io, "TruthTable")
+  pretty_table(io, table,
+    vcrop_mode=:middle,
+    header_alignment=:c,
+    header=table.colnames,
+    formatters=formatter,
+    newline_at_end=false,
+    alignment=:l
+  )
 end

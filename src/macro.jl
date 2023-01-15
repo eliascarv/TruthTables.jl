@@ -1,8 +1,8 @@
 function _kwarg(expr::Expr)::Bool
-    if expr.head == :(=) && expr.args[1] == :full
-        return expr.args[2] 
-    end
-    throw(ArgumentError("Invalid kwarg expression."))
+  if expr.head == :(=) && expr.args[1] == :full
+    return expr.args[2]
+  end
+  throw(ArgumentError("Invalid kwarg expression."))
 end
 
 """
@@ -100,38 +100,38 @@ TruthTable
 ```
 """
 macro truthtable(expr, full)
-    _truthtable(expr, _kwarg(full))
+  _truthtable(expr, _kwarg(full))
 end
 
 macro truthtable(expr)
-    _truthtable(expr, false)
+  _truthtable(expr, false)
 end
 
 function _truthtable(expr::Expr, full::Bool)
-    preprocess!(expr)
+  preprocess!(expr)
 
-    colnames = propnames(expr)
-    n = length(colnames)
-    rows = Iterators.product(fill([true, false], n)...)
-    columns = Vector{Bool}[vec([row[i] for row in rows]) for i in n:-1:1]
-    colexprs = Expr[]
+  colnames = propnames(expr)
+  n = length(colnames)
+  rows = Iterators.product(fill([true, false], n)...)
+  columns = Vector{Bool}[vec([row[i] for row in rows]) for i in n:-1:1]
+  colexprs = Expr[]
 
-    if full
-        subexprs = getsubexprs(expr)
-        for subexpr in subexprs
-            nms = propnames(subexpr)
-            inds = indexin(nms, colnames)
-            colexpr = :( map(($(nms...),) -> $subexpr, $(columns[inds]...)) )
-            push!(colnames, exprname(subexpr))
-            push!(colexprs, colexpr)
-        end
-    else
-        colexpr = :( map(($(colnames...),) -> $expr, $(columns...)) )
-        push!(colnames, exprname(expr))
-        push!(colexprs, colexpr)
+  if full
+    subexprs = getsubexprs(expr)
+    for subexpr in subexprs
+      nms = propnames(subexpr)
+      inds = indexin(nms, colnames)
+      colexpr = :(map(($(nms...),) -> $subexpr, $(columns[inds]...)))
+      push!(colnames, exprname(subexpr))
+      push!(colexprs, colexpr)
     end
+  else
+    colexpr = :(map(($(colnames...),) -> $expr, $(columns...)))
+    push!(colnames, exprname(expr))
+    push!(colexprs, colexpr)
+  end
 
-    return quote
-        TruthTable([$(columns...), $(colexprs...)], $colnames)
-    end
+  return quote
+    TruthTable([$(columns...), $(colexprs...)], $colnames)
+  end
 end

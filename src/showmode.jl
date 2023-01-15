@@ -69,10 +69,10 @@ TruthTable
 ```
 """
 function showmode!(mode::Symbol)
-    if mode ∉ (:bool, :bit, :letter)
-        throw(ArgumentError("Invalid show mode, use :bool, :bit or :letter."))
-    end
-    SHOW_MODE[] = mode
+  if mode ∉ (:bool, :bit, :letter)
+    throw(ArgumentError("Invalid show mode, use :bool, :bit or :letter."))
+  end
+  SHOW_MODE[] = mode
 end
 
 showmode!() = (SHOW_MODE[] = :bool)
@@ -82,9 +82,9 @@ _bit_formatter(v, i, j) = Int(v)
 _letter_formatter(v, i, j) = v ? "T" : "F"
 
 function getformatter()
-    mode = SHOW_MODE[]
-    mode == :bool && return nothing
-    mode == :bit && return _bit_formatter
-    mode == :letter && return _letter_formatter
-    return nothing
+  mode = SHOW_MODE[]
+  mode == :bool && return nothing
+  mode == :bit && return _bit_formatter
+  mode == :letter && return _letter_formatter
+  return nothing
 end
