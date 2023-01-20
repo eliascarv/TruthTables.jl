@@ -70,7 +70,7 @@ TruthTable
 """
 function showmode!(mode::Symbol)
   if mode ∉ (:bool, :bit, :letter)
-    throw(ArgumentError("Invalid show mode, use :bool, :bit or :letter."))
+    throw(ArgumentError("Invalid show mode, use :bool, :bit or :letter"))
   end
   SHOW_MODE[] = mode
 end

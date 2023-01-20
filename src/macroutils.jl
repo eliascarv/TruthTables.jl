@@ -19,7 +19,7 @@ function preprocess!(expr::Expr)
   elseif expr.head == :call && expr.args[1] ∈ OPRS
     args = expr.args[2:end]
   else
-    throw(ArgumentError("Expression with invalid operator."))
+    throw(ArgumentError("Expression with invalid operator"))
   end
 
   for arg in args
@@ -29,7 +29,7 @@ function preprocess!(expr::Expr)
   end
 end
 
-_propname(x) = throw(ArgumentError("$x is not a valid proposition name."))
+_propname(x) = throw(ArgumentError("$x is not a valid proposition name"))
 _propname(x::Symbol) = x
 
 function _propnames!(props::Vector{Symbol}, expr::Expr)
