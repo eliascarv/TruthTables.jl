@@ -81,7 +81,7 @@ showmode!() = (SHOW_MODE[] = :bool)
 _bit_formatter(v, i, j) = Int(v)
 _letter_formatter(v, i, j) = v ? "T" : "F"
 
-function getformatter()
+function getformatter()::Union{Nothing,Function}
   mode = SHOW_MODE[]
   mode == :bool && return nothing
   mode == :bit && return _bit_formatter
