@@ -12,8 +12,8 @@ function Tables.schema(table::TruthTable)
   Tables.Schema(names, types)
 end
 
-_colnames(names) = collect(names)
-_colnames(names::Vector) = names
+_colnames(names) = collect(Symbol, names)
+_colnames(names::Vector{Symbol}) = names
 
 function TruthTable(table)
   Tables.istable(table) || throw(ArgumentError("The argument is not a table."))
