@@ -1,3 +1,10 @@
+function gencolumns(n::Integer)
+  bools = [true, false]
+  outers = [2^x for x in 0:n-1]
+  inners = reverse(outers)
+  [repeat(bools; inner, outer) for (inner, outer) in zip(inners, outers)]
+end
+
 const OPRS = (
   :&, :∧,
   :|, :∨,

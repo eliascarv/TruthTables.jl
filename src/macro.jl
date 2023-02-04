@@ -111,9 +111,7 @@ function _truthtable(expr::Expr, full::Bool)
   preprocess!(expr)
 
   colnames = propnames(expr)
-  n = length(colnames)
-  rows = Iterators.product(fill([true, false], n)...)
-  columns = Vector{Bool}[vec([row[i] for row in rows]) for i in n:-1:1]
+  columns  = gencolumns(length(colnames))
   colexprs = Expr[]
 
   if full
