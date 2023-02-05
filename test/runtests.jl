@@ -75,7 +75,7 @@ using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
     @test TruthTables._propnames(expr) == [:p, :q, :r]
     @test TruthTables._subexprs(expr) == [:(p && q), :(p && q --> r)]
     @test TruthTables._exprname(expr) == Symbol("p ∧ q --> r")
-    @test TruthTables._colexpr(expr) == :(broadcast(-->, broadcast(&, colmap[:p], colmap[:q]), colmap[:r]))
+    @test TruthTables._colexpr(expr) == :(map(-->, map(&, colmap[:p], colmap[:q]), colmap[:r]))
 
     @test_throws ArgumentError TruthTables._propname(1)
     @test_throws ArgumentError TruthTables._kwarg(:(full => true))

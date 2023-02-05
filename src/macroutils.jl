@@ -41,7 +41,7 @@ function _preprocess!(expr::Expr)
     throw(ArgumentError("Expression with invalid operator"))
   end
 
-  pushfirst!(expr.args, :broadcast)
+  pushfirst!(expr.args, :map)
 
   for i in 3:length(expr.args)
     arg = expr.args[i]
