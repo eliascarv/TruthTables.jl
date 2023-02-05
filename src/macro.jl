@@ -103,7 +103,7 @@ end
 function _truthtable(expr::Expr, full::Bool)
   colexprs = Expr[]
   colnames = _propnames(expr)
-  columns = _gencolumns(length(colnames))
+  columns = _propcolumns(length(colnames))
   colmap = Dict(zip(colnames, columns))
 
   if full

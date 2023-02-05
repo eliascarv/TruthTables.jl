@@ -5,18 +5,21 @@ function _kwarg(expr::Expr)::Bool
   expr.args[2]
 end
 
-function _gencolumns(n::Integer)
-  bools = [true, false]
-  outers = [2^x for x in 0:n-1]
-  inners = reverse(outers)
-  [repeat(bools; inner, outer) for (inner, outer) in zip(inners, outers)]
-end
-
 function _colexpr(expr::Expr)
   colexpr = copy(expr)
   _preprocess!(colexpr)
   colexpr
 end
+
+const OPRS = (
+  :&, :∧,
+  :|, :∨,
+  :!, :~, :¬,
+  :⊻, :⊼, :⊽,
+  :(-->), :→, :⇒,
+  :(<-->), :↔, :⇔,
+  :(===), :≡
+)
 
 function _preprocess!(expr::Expr)
   if expr.head === :(-->)
@@ -34,7 +37,9 @@ function _preprocess!(expr::Expr)
     pushfirst!(expr.args, :|)
   end
 
-  _checkexpr(expr)
+  if expr.head !== :call || expr.args[1] ∉ OPRS
+    throw(ArgumentError("Expression with invalid operator"))
+  end
 
   pushfirst!(expr.args, :broadcast)
 
@@ -50,47 +55,34 @@ function _preprocess!(expr::Expr)
   end
 end
 
-const OPRS = (
-  :&, :∧,
-  :|, :∨,
-  :!, :~, :¬,
-  :⊻, :⊼, :⊽,
-  :(-->), :→, :⇒,
-  :(<-->), :↔, :⇔,
-  :(===), :≡
-)
-
-function _checkexpr(expr::Expr)
-  if expr.head !== :call
-    throw(ArgumentError("Invalid expression"))
-  end
-
-  if expr.args[1] ∉ OPRS
-    throw(ArgumentError("Expression with invalid operator"))
-  end
+function _propcolumns(n::Integer)
+  bools = [true, false]
+  outers = [2^x for x in 0:n-1]
+  inners = reverse(outers)
+  [repeat(bools; inner, outer) for (inner, outer) in zip(inners, outers)]
 end
 
 function _propnames(expr::Expr)
-  props = Symbol[]
-  _propnames!(props, expr)
-  unique!(props)
-  props
+  names = Symbol[]
+  _propnames!(names, expr)
+  unique!(names)
+  names
 end
 
-function _propnames!(props::Vector{Symbol}, expr::Expr)
+function _propnames!(names::Vector{Symbol}, expr::Expr)
   b = expr.head === :call ? 2 : 1
   for i in b:length(expr.args)
     arg = expr.args[i]
     if arg isa Expr
-      _propnames!(props, arg)
+      _propnames!(names, arg)
     else
-      push!(props, _propname(arg))
+      push!(names, _propname(arg))
     end
   end
 end
 
-_propname(x) = throw(ArgumentError("$x is not a valid proposition name"))
-_propname(x::Symbol) = x
+_propname(name) = throw(ArgumentError("$name is not a valid proposition name"))
+_propname(name::Symbol) = name
 
 function _subexprs(expr::Expr)
   exprs = [expr]
