@@ -4,8 +4,8 @@ struct TruthTable
   colnames::Vector{Symbol}
 end
 
-function TruthTable(columns::Vector{Vector{Bool}}, colnames::Vector{Symbol})
-  colindex = Dict(k => i for (i, k) in pairs(colnames))
+function TruthTable(columns::Vector{<:AbstractVector{Bool}}, colnames::Vector{Symbol})
+  colindex = Dict(k => i for (i, k) in enumerate(colnames))
   TruthTable(columns, colindex, colnames)
 end
 
