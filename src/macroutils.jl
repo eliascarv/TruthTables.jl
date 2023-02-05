@@ -79,7 +79,7 @@ end
 
 function _propnames!(props::Vector{Symbol}, expr::Expr)
   b = expr.head === :call ? 2 : 1
-  for i in length(expr.args):-1:b
+  for i in b:length(expr.args)
     arg = expr.args[i]
     if arg isa Expr
       _propnames!(props, arg)
