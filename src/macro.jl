@@ -1,10 +1,3 @@
-function _kwarg(expr::Expr)::Bool
-  if expr.head == :(=) && expr.args[1] == :full
-    return expr.args[2]
-  end
-  throw(ArgumentError("Invalid kwarg expression"))
-end
-
 """
     @truthtable formula [full=false]
 
@@ -108,28 +101,24 @@ macro truthtable(expr)
 end
 
 function _truthtable(expr::Expr, full::Bool)
-  preprocess!(expr)
-
-  colnames = propnames(expr)
-  columns  = gencolumns(length(colnames))
   colexprs = Expr[]
+  colnames = _propnames(expr)
+  columns = _propcolumns(length(colnames))
+  colmap = Dict(zip(colnames, columns))
 
   if full
-    subexprs = getsubexprs(expr)
+    subexprs = _subexprs(expr)
     for subexpr in subexprs
-      nms = propnames(subexpr)
-      inds = indexin(nms, colnames)
-      colexpr = :(map(($(nms...),) -> $subexpr, $(columns[inds]...)))
-      push!(colnames, exprname(subexpr))
-      push!(colexprs, colexpr)
+      push!(colnames, _exprname(subexpr))
+      push!(colexprs, _colexpr(subexpr))
     end
   else
-    colexpr = :(map(($(colnames...),) -> $expr, $(columns...)))
-    push!(colnames, exprname(expr))
-    push!(colexprs, colexpr)
+    push!(colnames, _exprname(expr))
+    push!(colexprs, _colexpr(expr))
   end
 
-  return quote
+  quote
+    local colmap = $colmap
     TruthTable([$(columns...), $(colexprs...)], $colnames)
   end
 end

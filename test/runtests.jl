@@ -52,7 +52,7 @@ using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
     @test Tables.getcolumn(tt, :q) == Bool[1, 0, 1, 0]
     @test Tables.getcolumn(tt, Symbol("p ∨ q")) == Bool[1, 1, 1, 0]
 
-    tt = @truthtable !(x || y) <--> (!x && !y) full = true
+    tt = @truthtable !(x || y) <--> (!x && !y) full=true
     @test Tables.getcolumn(tt, 1) == Bool[1, 1, 0, 0]
     @test Tables.getcolumn(tt, 2) == Bool[1, 0, 1, 0]
     @test Tables.getcolumn(tt, 3) == Bool[1, 1, 1, 0]
@@ -72,15 +72,29 @@ using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
 
     # helper functions
     expr = :(p && q --> r)
-    @test TruthTables.propnames(expr) == [:p, :q, :r]
-    @test TruthTables.getsubexprs(expr) == [:(p && q), :(p && q --> r)]
-    @test TruthTables.exprname(expr) == Symbol("p ∧ q --> r")
-    TruthTables.preprocess!(expr)
-    @test expr.head == :call && expr.args[1] == :(-->)
+    @test TruthTables._propnames(expr) == [:p, :q, :r]
+    @test TruthTables._subexprs(expr) == [:(p && q), :(p && q --> r)]
+    @test TruthTables._exprname(expr) == Symbol("p ∧ q --> r")
+    @test TruthTables._colexpr(expr) == :(map(-->, map(&, colmap[:p], colmap[:q]), colmap[:r]))
+
+    @test TruthTables._propcolumns(1) == [Bool[1, 0]]
+    @test TruthTables._propcolumns(2) == [Bool[1, 1, 0, 0], Bool[1, 0, 1, 0]]
+    @test TruthTables._propcolumns(3) == [
+      Bool[1, 1, 1, 1, 0, 0, 0, 0],
+      Bool[1, 1, 0, 0, 1, 1, 0, 0],
+      Bool[1, 0, 1, 0, 1, 0, 1, 0]
+    ]
+    @test TruthTables._propcolumns(4) == [
+      Bool[1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+      Bool[1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+      Bool[1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+      Bool[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+    ]
 
     @test_throws ArgumentError TruthTables._propname(1)
     @test_throws ArgumentError TruthTables._kwarg(:(full => true))
-    @test_throws ArgumentError TruthTables.preprocess!(:(p + q))
+    @test_throws ArgumentError TruthTables._colexpr(:(p + q))
+    @test_throws ArgumentError TruthTables._colexpr(:(p ? q : r))
   end
 
   @testset "TruthTable show" begin
@@ -143,7 +157,7 @@ using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
 
     # show mode: :bool (default)
     TruthTables.showmode!()
-    tt = @truthtable p && (q || r) full = true
+    tt = @truthtable p && (q || r) full=true
     str = """
     TruthTable
     ┌───────┬───────┬───────┬───────┬─────────────┐
