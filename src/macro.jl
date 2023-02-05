@@ -1,10 +1,3 @@
-function _kwarg(expr::Expr)::Bool
-  if expr.head == :(=) && expr.args[1] == :full
-    return expr.args[2]
-  end
-  throw(ArgumentError("Invalid kwarg expression"))
-end
-
 """
     @truthtable formula [full=false]
 

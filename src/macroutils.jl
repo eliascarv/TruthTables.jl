@@ -1,3 +1,10 @@
+function _kwarg(expr::Expr)::Bool
+  if !Meta.isexpr(expr, :(=), 2) || expr.args[1] !== :full
+    throw(ArgumentError("Invalid kwarg expression"))
+  end
+  expr.args[2]
+end
+
 function _gencolumns(n::Integer)
   bools = [true, false]
   outers = [2^x for x in 0:n-1]
