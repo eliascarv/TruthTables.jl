@@ -67,11 +67,11 @@ function _propnames(expr::Expr)
   props = Symbol[]
   _propnames!(props, expr)
   unique!(props)
-  return props
+  props
 end
 
 function _propnames!(props::Vector{Symbol}, expr::Expr)
-  b = expr.head == :call ? 2 : 1
+  b = expr.head === :call ? 2 : 1
   for i in length(expr.args):-1:b
     arg = expr.args[i]
     if arg isa Expr
@@ -88,11 +88,11 @@ _propname(x::Symbol) = x
 function _subexprs(expr::Expr)
   exprs = [expr]
   _subexprs!(exprs, expr)
-  return exprs
+  exprs
 end
 
 function _subexprs!(exprs::Vector{Expr}, expr::Expr)
-  b = expr.head == :call ? 2 : 1
+  b = expr.head === :call ? 2 : 1
   for i in length(expr.args):-1:b
     arg = expr.args[i]
     if arg isa Expr
