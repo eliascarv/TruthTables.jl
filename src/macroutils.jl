@@ -11,16 +11,6 @@ function _colexpr(expr::Expr)
   colexpr
 end
 
-const OPRS = (
-  :&, :∧,
-  :|, :∨,
-  :!, :~, :¬,
-  :⊻, :⊼, :⊽,
-  :(-->), :→, :⇒,
-  :(<-->), :↔, :⇔,
-  :(===), :≡
-)
-
 function _preprocess!(expr::Expr)
   if expr.head === :(-->)
     expr.head = :call
