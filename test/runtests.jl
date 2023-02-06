@@ -36,11 +36,11 @@ using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
     @test Tables.getcolumn(tt, :a) == [true, false]
     @test Tables.getcolumn(tt, :b) == [false, true]
 
-    table = (a=[true, false], b=[false, true])
+    table = (a=[true, false], b=BitVector([false, true]), c=[1, 0])
     tt = TruthTable(table)
-    @test tt.columns == [[true, false], [false, true]]
-    @test tt.colnames == [:a, :b]
-    @test tt.colindex == Dict(:a => 1, :b => 2)
+    @test tt.columns == [[true, false], [false, true], [true, false]]
+    @test tt.colnames == [:a, :b, :c]
+    @test tt.colindex == Dict(:a => 1, :b => 2, :c => 3)
   end
 
   @testset "@truthtable" begin
