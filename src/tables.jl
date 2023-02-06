@@ -12,17 +12,18 @@ function Tables.schema(table::TruthTable)
   Tables.Schema(names, types)
 end
 
-_colnames(names) = collect(Symbol, names)
-_colnames(names::Vector{Symbol}) = names
-
 function TruthTable(table)
   Tables.istable(table) || throw(ArgumentError("The argument is not a table"))
   cols = Tables.columns(table)
   names = Tables.columnnames(cols)
-  colnames = _colnames(names)
+  colnames = getvector(Symbol, names)
   columns = map(colnames) do nm
     x = Tables.getcolumn(cols, nm)
-    collect(Bool, x)
+    getvector(Bool, x)
   end
   TruthTable(columns, colnames)
 end
+
+# utils
+getvector(::Type{T}, x) where {T} = collect(T, x)
+getvector(::Type{T}, x::Vector{T}) where {T} = x
