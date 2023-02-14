@@ -1,8 +1,8 @@
 """
     _kwarg(expr) -> Bool
 
-Validates kwarg expression of the `@truthtable` macro.
-If the expression is valid, it return the value of the kwarg expression.
+Validates the kwarg expression of the `@truthtable` macro.
+If the expression is valid, the value of the kwarg expression is returned.
 """
 function _kwarg(expr::Expr)::Bool
   if !Meta.isexpr(expr, :(=), 2) || expr.args[1] !== :full
@@ -14,7 +14,7 @@ end
 """
     _propnames(expr) -> Vector{Symbol}
 
-Return the proposition names of the logical expression.
+Returns the proposition names of the logical expression.
 """
 function _propnames(expr::Expr)
   names = Symbol[]
@@ -35,8 +35,8 @@ function _propnames!(names::Vector{Symbol}, expr::Expr)
   end
 end
 
-_propname(name) = throw(ArgumentError("$name is not a valid proposition name"))
 _propname(name::Symbol) = name
+_propname(::Any) = throw(ArgumentError("Expression with invalid proposition name"))
 
 """
     _propcolumns(n) -> Vector{Vector{Bool}}
@@ -53,7 +53,7 @@ end
 """
     _subexprs(expr) -> Vector{Expr}
 
-Return the subexpressions of the logical expression.
+Returns the subexpressions of the logical expression.
 The expressions in the vector are sorted according to
 the execution order of the logical expression.
 """
@@ -77,7 +77,7 @@ end
 """
     _exprname(expr) -> Symbol
 
-Return the formated name of the logical expression.
+Returns the formatted name of the logical expression.
 """
 _exprname(expr::Expr)
 
