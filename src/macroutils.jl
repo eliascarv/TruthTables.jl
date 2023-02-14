@@ -124,12 +124,12 @@ function _preprocess!(expr::Expr)
     pushfirst!(expr.args, :(-->))
   end
 
-  if expr.head === :&&
+  if expr.head === :(&&)
     expr.head = :call
     pushfirst!(expr.args, :&)
   end
 
-  if expr.head === :||
+  if expr.head === :(||)
     expr.head = :call
     pushfirst!(expr.args, :|)
   end
