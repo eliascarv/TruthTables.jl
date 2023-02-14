@@ -126,12 +126,12 @@ function _preprocess!(expr::Expr)
 
   if expr.head === :(&&)
     expr.head = :call
-    pushfirst!(expr.args, :&)
+    pushfirst!(expr.args, :(&))
   end
 
   if expr.head === :(||)
     expr.head = :call
-    pushfirst!(expr.args, :|)
+    pushfirst!(expr.args, :(|))
   end
 
   if expr.head !== :call || expr.args[1] ∉ OPRS
