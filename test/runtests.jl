@@ -72,26 +72,26 @@ using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
 
     # helper functions
     expr = :(p && q --> r)
-    @test TruthTables._propnames(expr) == [:p, :q, :r]
+    @test TruthTables._varnames(expr) == [:p, :q, :r]
     @test TruthTables._subexprs(expr) == [:(p && q), :(p && q --> r)]
     @test TruthTables._exprname(expr) == Symbol("p ∧ q --> r")
     @test TruthTables._colexpr(expr) == :(map(-->, map(&, colmap[:p], colmap[:q]), colmap[:r]))
 
-    @test TruthTables._propcolumns(1) == [Bool[1, 0]]
-    @test TruthTables._propcolumns(2) == [Bool[1, 1, 0, 0], Bool[1, 0, 1, 0]]
-    @test TruthTables._propcolumns(3) == [
+    @test TruthTables._varcolumns(1) == [Bool[1, 0]]
+    @test TruthTables._varcolumns(2) == [Bool[1, 1, 0, 0], Bool[1, 0, 1, 0]]
+    @test TruthTables._varcolumns(3) == [
       Bool[1, 1, 1, 1, 0, 0, 0, 0],
       Bool[1, 1, 0, 0, 1, 1, 0, 0],
       Bool[1, 0, 1, 0, 1, 0, 1, 0]
     ]
-    @test TruthTables._propcolumns(4) == [
+    @test TruthTables._varcolumns(4) == [
       Bool[1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
       Bool[1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
       Bool[1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
       Bool[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
     ]
 
-    @test_throws ArgumentError TruthTables._propname(1)
+    @test_throws ArgumentError TruthTables._varname(1)
     @test_throws ArgumentError TruthTables._kwarg(:(full => true))
     @test_throws ArgumentError TruthTables._colexpr(:(p + q))
     @test_throws ArgumentError TruthTables._colexpr(:(p ? q : r))

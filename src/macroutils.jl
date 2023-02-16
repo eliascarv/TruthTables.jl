@@ -12,38 +12,38 @@ function _kwarg(expr::Expr)::Bool
 end
 
 """
-    _propnames(expr) -> Vector{Symbol}
+    _varnames(expr) -> Vector{Symbol}
 
-Returns the proposition names of the logical expression.
+Returns the propositional variable names of the logical expression.
 """
-function _propnames(expr::Expr)
+function _varnames(expr::Expr)
   names = Symbol[]
-  _propnames!(names, expr)
+  _varnames!(names, expr)
   unique!(names)
   names
 end
 
-function _propnames!(names::Vector{Symbol}, expr::Expr)
+function _varnames!(names::Vector{Symbol}, expr::Expr)
   b = expr.head === :call ? 2 : 1
   for i in b:length(expr.args)
     arg = expr.args[i]
     if arg isa Expr
-      _propnames!(names, arg)
+      _varnames!(names, arg)
     else
-      push!(names, _propname(arg))
+      push!(names, _varname(arg))
     end
   end
 end
 
-_propname(name::Symbol) = name
-_propname(::Any) = throw(ArgumentError("Expression with invalid proposition name"))
+_varname(name::Symbol) = name
+_varname(::Any) = throw(ArgumentError("Expression with invalid propositional variable"))
 
 """
-    _propcolumns(n) -> Vector{Vector{Bool}}
+    _varcolumns(n) -> Vector{Vector{Bool}}
 
-Returns proposition columns given `n` number of propositions.
+Returns the propositional variable columns given `n` number of variables.
 """
-function _propcolumns(n::Integer)
+function _varcolumns(n::Integer)
   bools = [true, false]
   outers = [2^x for x in 0:n-1]
   inners = reverse(outers)
