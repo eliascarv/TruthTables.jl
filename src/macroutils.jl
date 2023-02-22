@@ -14,7 +14,7 @@ end
 """
     _varnames(expr) -> Vector{Symbol}
 
-Returns the propositional variable names of the logical expression.
+Returns the names of propositional variables from the logical expression.
 """
 function _varnames(expr::Expr)
   names = Symbol[]
@@ -41,7 +41,7 @@ _varname(::Any) = throw(ArgumentError("Expression with invalid propositional var
 """
     _varcolumns(n) -> Vector{Vector{Bool}}
 
-Returns the propositional variable columns given `n` number of variables.
+Returns columns of propositional variables from a given number `n` of variables.
 """
 function _varcolumns(n::Integer)
   bools = [true, false]
