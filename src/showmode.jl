@@ -83,8 +83,8 @@ _letter_formatter(v, i, j) = v ? "T" : "F"
 
 function getformatter()::Union{Nothing,Function}
   mode = SHOW_MODE[]
-  mode == :bool && return nothing
-  mode == :bit && return _bit_formatter
-  mode == :letter && return _letter_formatter
+  mode === :bool && return nothing
+  mode === :bit && return _bit_formatter
+  mode === :letter && return _letter_formatter
   return nothing
 end

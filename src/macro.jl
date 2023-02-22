@@ -1,7 +1,7 @@
 """
     @truthtable formula [full=false]
 
-Creates a truth table for the logical propositional formula.
+Creates a truth table for the propositional formula.
 
 `full` is an optional keyword argument which by default is `false`. 
 If `full` is `true`, the truth table will be created in expanded form.
@@ -102,8 +102,8 @@ end
 
 function _truthtable(expr::Expr, full::Bool)
   colexprs = Expr[]
-  colnames = _propnames(expr)
-  columns = _propcolumns(length(colnames))
+  colnames = _varnames(expr)
+  columns = _varcolumns(length(colnames))
   colmap = Dict(zip(colnames, columns))
 
   if full
