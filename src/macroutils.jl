@@ -19,7 +19,6 @@ Returns the names of propositional variables from the logical expression.
 function _varnames(expr::Expr)
   names = Symbol[]
   _varnames!(names, expr)
-  unique!(names)
   names
 end
 
@@ -29,14 +28,13 @@ function _varnames!(names::Vector{Symbol}, expr::Expr)
     arg = expr.args[i]
     if arg isa Expr
       _varnames!(names, arg)
+    elseif arg isa Symbol
+      arg ∉ names && push!(names, arg)
     else
-      push!(names, _varname(arg))
+      throw(ArgumentError("Expression with invalid propositional variable"))
     end
   end
 end
-
-_varname(name::Symbol) = name
-_varname(::Any) = throw(ArgumentError("Expression with invalid propositional variable"))
 
 """
     _varcolumns(n) -> Vector{Vector{Bool}}

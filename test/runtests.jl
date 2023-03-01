@@ -91,8 +91,8 @@ using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
       Bool[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
     ]
 
-    @test_throws ArgumentError TruthTables._varname(1)
     @test_throws ArgumentError TruthTables._kwarg(:(full => true))
+    @test_throws ArgumentError TruthTables._varnames(:(p && 1))
     @test_throws ArgumentError TruthTables._colexpr(:(p + q))
     @test_throws ArgumentError TruthTables._colexpr(:(p ? q : r))
   end
