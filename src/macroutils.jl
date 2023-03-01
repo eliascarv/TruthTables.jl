@@ -4,11 +4,11 @@
 Validates the kwarg expression of the `@truthtable` macro.
 If the expression is valid, the value of the kwarg expression is returned.
 """
-function _kwarg(expr::Expr)::Bool
+function _kwarg(expr::Expr)
   if !Meta.isexpr(expr, :(=), 2) || expr.args[1] !== :full
     throw(ArgumentError("Invalid kwarg expression"))
   end
-  expr.args[2]
+  expr.args[2]::Bool
 end
 
 """
