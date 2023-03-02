@@ -15,7 +15,7 @@ julia>] add TruthTables
 
 ## Usage
 
-To create a truth table use the `@truthtable` macro passing a proposition as an argument:
+To create a truth table use the `@truthtable` macro passing a proposition (logical expression) as an argument:
 
 ```julia
 julia> using TruthTables
