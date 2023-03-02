@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/eliascarv/TruthTables.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/eliascarv/TruthTables.jl/actions/workflows/CI.yml?query=branch%3Amain)
 [![Coverage](https://codecov.io/gh/eliascarv/TruthTables.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/eliascarv/TruthTables.jl)
 
-TruthTables.jl was created for educational purposes and generate truth tables by passing Julia expressions in the macro `@truthtable`.
+TruthTables.jl is an educational package that generates truth tables from Julia expressions using the `@truthtable` macro.
 
 ## Installation
 
