@@ -78,7 +78,7 @@ end
 showmode!() = (SHOW_MODE[] = :bool)
 
 # formatters
-_bit_formatter(v, i, j) = Int(v)
+_bit_formatter(v, i, j) = v ? "1" : "0"
 _letter_formatter(v, i, j) = v ? "T" : "F"
 
 function getformatter()
