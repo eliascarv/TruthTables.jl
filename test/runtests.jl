@@ -221,8 +221,8 @@ using TruthTables: ∧, ∨, -->, <-->, ¬, →, ↔, ⇒, ⇔
     @test TruthTables.getformatter() === nothing
 
     # formatters
-    @test TruthTables._bit_formatter(true, 1, 1) == 1
-    @test TruthTables._bit_formatter(false, 1, 1) == 0
+    @test TruthTables._bit_formatter(true, 1, 1) == "1"
+    @test TruthTables._bit_formatter(false, 1, 1) == "0"
     @test TruthTables._letter_formatter(true, 1, 1) == "T"
     @test TruthTables._letter_formatter(false, 1, 1) == "F"
 
